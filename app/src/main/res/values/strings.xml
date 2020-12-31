@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ProjectM</string>
+    <string name="sigup">SigUp</string>
+    <string name="don_t_have_an_account">Don\'t have an account</string>
+    <string name="sigin">SigIn</string>
+    <string name="email_enter">Enter Your Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password2">Conferm Password</string>
+    <string name="sinup">SinUp</string>
+    <string name="do_you_have_an_account">Do you have an account</string>
 </resources>
