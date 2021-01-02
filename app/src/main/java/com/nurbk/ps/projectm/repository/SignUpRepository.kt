@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nurbk.ps.projectm.model.User
+import com.nurbk.ps.projectm.others.COLLECTION_USERS
 
 class SignUpRepository private constructor(context: Context) {
 
@@ -61,7 +62,7 @@ class SignUpRepository private constructor(context: Context) {
 
     private fun insertUser(user: User) = FirebaseFirestore
         .getInstance()
-        .collection("User")
+        .collection(COLLECTION_USERS)
         .document(user.id).set(user)
         .addOnCompleteListener {
             if (it.isSuccessful) {

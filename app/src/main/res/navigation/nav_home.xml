@@ -11,9 +11,16 @@
         <action
             android:id="@+id/action_sigInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_sigInFragment_to_userListFragment"
+            app:destination="@id/userListFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.nurbk.ps.projectm.ui.fragment.SignUpFragment"
         android:label="SignUpFragment" />
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.UserListFragment"
+        android:label="UserListFragment" />
 </navigation>

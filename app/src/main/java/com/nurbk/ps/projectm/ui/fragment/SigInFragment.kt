@@ -10,13 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentSignInBinding
-import com.nurbk.ps.projectm.dialog
-import com.nurbk.ps.projectm.showDialog
+import com.nurbk.ps.projectm.others.IS_SIGN_IN
+import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.SignInAuthViewModel
+import com.nurbk.ps.projectm.utils.PreferencesManager
 
 class SigInFragment : Fragment() {
 
     private lateinit var mBinding: FragmentSignInBinding
+    private lateinit var loadingDialog: LoadingDialog
+
     private val viewModel by lazy {
         ViewModelProvider(
             this,
@@ -45,20 +48,25 @@ class SigInFragment : Fragment() {
                 R.id.action_sigInFragment_to_signUpFragment
             )
         }
-
+        loadingDialog = LoadingDialog()
         mBinding.btnSinIn.setOnClickListener {
             val email = mBinding.txtEmail.text.toString()
             val password = mBinding.txtPassword.text.toString()
-            showDialog(requireActivity())
+            loadingDialog.show(requireActivity().supportFragmentManager, "")
+
             viewModel.signInWithEmailAndPassword(email = email, password = password)
 
         }
 
         viewModel.getSignIn().observe(viewLifecycleOwner) {
             if (it) {
-                Toast.makeText(requireContext(), "True", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
             }
-            dialog.hide()
+            loadingDialog.dismiss()
+        }
+
+        if (PreferencesManager(requireContext()).getPreferences().getBoolean(IS_SIGN_IN, false)) {
+//            findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
         }
 
     }

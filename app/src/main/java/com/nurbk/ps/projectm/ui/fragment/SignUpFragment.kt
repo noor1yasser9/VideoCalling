@@ -9,16 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.databinding.FragmentSignUpBinding
-import com.nurbk.ps.projectm.dialog
 import com.nurbk.ps.projectm.model.User
-import com.nurbk.ps.projectm.showDialog
-import com.nurbk.ps.projectm.ui.viewmodel.SignInAuthViewModel
+import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.SignUpAuthViewModel
 
 class SignUpFragment : Fragment() {
 
     private lateinit var mBinding: FragmentSignUpBinding
-
+    private lateinit var loadingDialog: LoadingDialog
     private val viewModel by lazy {
         ViewModelProvider(
             this,
@@ -42,7 +40,7 @@ class SignUpFragment : Fragment() {
         mBinding.bntSignIn.setOnClickListener {
             findNavController().navigateUp()
         }
-
+        loadingDialog = LoadingDialog()
         mBinding.btnSinUp.setOnClickListener {
 
             val name = mBinding.txtName.text.toString()
@@ -50,7 +48,7 @@ class SignUpFragment : Fragment() {
             val password = mBinding.txtPassword.text.toString()
             val confPassword = mBinding.txtConPassword.text.toString()
 
-            showDialog(requireActivity())
+            loadingDialog.show(requireActivity().supportFragmentManager, "")
             viewModel.createAccount(User(name = name, email = email, password = password))
 
         }
@@ -58,8 +56,9 @@ class SignUpFragment : Fragment() {
         viewModel.getSignUp().observe(viewLifecycleOwner) {
             if (it) {
                 Toast.makeText(requireContext(), "True", Toast.LENGTH_LONG).show()
+                findNavController().navigateUp()
             }
-            dialog.hide()
+            loadingDialog.dismiss()
         }
 
     }

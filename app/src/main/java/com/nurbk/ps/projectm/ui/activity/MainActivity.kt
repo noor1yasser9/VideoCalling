@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         )
         setSupportActionBar(mBinding.toolbar)
 
-
         navHostFragment.navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, arguments: Bundle? ->
             when (destination.id) {
                 R.id.sigInFragment, R.id.signUpFragment -> {
