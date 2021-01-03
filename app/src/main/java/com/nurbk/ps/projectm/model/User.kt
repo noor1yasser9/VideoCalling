@@ -7,4 +7,5 @@ data class User(
     val password: String = "",
     val image: String = "",
     val token: String = ""
+
 )

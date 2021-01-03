@@ -1,0 +1,36 @@
+package com.nurbk.ps.projectm.network
+
+import android.content.Context
+import com.nurbk.ps.projectm.utils.PreferencesManager
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+class ApiClient private constructor(context: Context) {
+
+    companion object {
+        @Volatile
+        private var instance: ApiClient? = null
+        private val LOCK = Any()
+        operator fun invoke(context: Context) =
+            instance ?: synchronized(LOCK) {
+                instance ?: createPreferences(context).also {
+                    instance = it
+                }
+            }
+
+        private fun createPreferences(context: Context) =
+            ApiClient(context)
+
+    }
+
+    private val BASE_URL = "https://fcm.googleapis.com/fcm/"
+
+    init {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    }
+
+}

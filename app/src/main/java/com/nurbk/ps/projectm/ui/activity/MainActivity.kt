@@ -13,6 +13,8 @@ import androidx.navigation.ui.NavigationUI
 import com.google.firebase.iid.FirebaseInstanceId
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.ActivityMainBinding
+import com.nurbk.ps.projectm.others.IS_SIGN_IN
+import com.nurbk.ps.projectm.utils.PreferencesManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        if (PreferencesManager(this).getPreferences()!!.getBoolean(IS_SIGN_IN, false)) {
+            val graph = navHostFragment.navController
+                .navInflater.inflate(R.navigation.nav_home)
+            graph.startDestination = R.id.userListFragment
+            navHostFragment.navController.graph = graph
+        }
 
     }
 }

@@ -22,5 +22,13 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.nurbk.ps.projectm.ui.fragment.UserListFragment"
-        android:label="UserListFragment" />
+        android:label="UserListFragment" >
+        <action
+            android:id="@+id/action_userListFragment_to_callFragment"
+            app:destination="@id/callFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.CallFragment"
+        android:label="CallFragment" />
 </navigation>

@@ -1,6 +1,7 @@
 package com.nurbk.ps.projectm.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentSignInBinding
 import com.nurbk.ps.projectm.others.IS_SIGN_IN
+import com.nurbk.ps.projectm.others.USER_DATA_PROFILE
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.SignInAuthViewModel
 import com.nurbk.ps.projectm.utils.PreferencesManager
@@ -22,7 +24,7 @@ class SigInFragment : Fragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(
-            this,
+            requireActivity(),
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[SignInAuthViewModel::class.java]
     }
@@ -43,6 +45,7 @@ class SigInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         mBinding.btnSignUp.setOnClickListener {
             findNavController().navigate(
                 R.id.action_sigInFragment_to_signUpFragment
@@ -59,15 +62,22 @@ class SigInFragment : Fragment() {
         }
 
         viewModel.getSignIn().observe(viewLifecycleOwner) {
+            val isSignI =
+                PreferencesManager(requireContext()).getPreferences()!!.getBoolean(IS_SIGN_IN, false)
+
             if (it) {
-                findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
+                try {
+                    if (isSignI)
+                        findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
-            loadingDialog.dismiss()
+            if (loadingDialog.isAdded)
+                loadingDialog.dismiss()
         }
 
-        if (PreferencesManager(requireContext()).getPreferences().getBoolean(IS_SIGN_IN, false)) {
-//            findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
-        }
+
 
     }
 
