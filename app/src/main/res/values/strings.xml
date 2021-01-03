@@ -11,4 +11,6 @@
     <string name="password2">Conferm Password</string>
     <string name="sinup">SinUp</string>
     <string name="do_you_have_an_account">Do you have an account</string>
+    <string name="incoming_meeting_invitation">Incoming Meeting invitation</string>
+    <string name="send_meeting_invitation">Send Meeting Invitation</string>
 </resources>

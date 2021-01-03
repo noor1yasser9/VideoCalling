@@ -26,9 +26,16 @@
         <action
             android:id="@+id/action_userListFragment_to_callFragment"
             app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_userListFragment_to_outgoingInvitationFragment"
+            app:destination="@id/outgoingInvitationFragment" />
     </fragment>
     <fragment
         android:id="@+id/callFragment"
-        android:name="com.nurbk.ps.projectm.ui.fragment.CallFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.IncomingCallFragment"
         android:label="CallFragment" />
+    <fragment
+        android:id="@+id/outgoingInvitationFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.OutgoingInvitationFragment"
+        android:label="OutgoingInvitationFragment" />
 </navigation>

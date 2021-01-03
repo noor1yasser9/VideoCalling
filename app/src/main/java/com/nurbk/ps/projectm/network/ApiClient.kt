@@ -24,12 +24,16 @@ class ApiClient private constructor(context: Context) {
     }
 
     private val BASE_URL = "https://fcm.googleapis.com/fcm/"
+    private var retrofit: Retrofit
+    var notificationInterface: NotificationInterface
 
     init {
-        val retrofit = Retrofit.Builder()
+        retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+        notificationInterface = retrofit.create(NotificationInterface::class.java)
 
     }
 
