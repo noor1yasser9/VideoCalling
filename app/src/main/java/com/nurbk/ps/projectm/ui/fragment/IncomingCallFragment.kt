@@ -20,9 +20,12 @@ import com.nurbk.ps.projectm.network.ApiClient
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.ui.activity.MainActivity
 import okhttp3.ResponseBody
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URL
 
 class IncomingCallFragment : Fragment() {
 
@@ -31,7 +34,7 @@ class IncomingCallFragment : Fragment() {
     private val argumentData by lazy {
         requireArguments()
     }
-
+    private var isAudio = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,8 +51,10 @@ class IncomingCallFragment : Fragment() {
         dataCalling = argumentData.getParcelable<CallingData>(USER_DATA)!!
         mBinding.data = dataCalling
 
-        if (dataCalling.meetingType == CALL_AUDIO)
+        if (dataCalling.meetingType == CALL_AUDIO) {
             mBinding.imageTypeCall.setImageResource(R.drawable.ic_baseline_call_24)
+            isAudio = true
+        }
 
         mBinding.btnFinshCall.setOnClickListener {
             sendRemoteMessage(false, REMOTE_MSG_INVITATION_REJECTED)
@@ -80,9 +85,24 @@ class IncomingCallFragment : Fragment() {
                         call: Call<ResponseBody>,
                         response: Response<ResponseBody>
                     ) {
-                        if (response.isSuccessful)
-                            Log.e("ttttttttttttisSucc", response.body().toString())
-                        else {
+                        if (response.isSuccessful) {
+
+                            try {
+
+                                val server = URL("https://meet.jit.si")
+                                val options = JitsiMeetConferenceOptions.Builder()
+                                    .setServerURL(server)
+                                    .setRoom(dataCalling.meetingRoom)
+                                    .setWelcomePageEnabled(false)
+                                    .setVideoMuted(isAudio)
+                                    .build()
+                                JitsiMeetActivity.launch(requireContext(), options)
+                                findNavController().navigateUp()
+
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        } else {
                             Log.e("tttttttttttt", response.errorBody().toString())
 
                         }
@@ -96,37 +116,6 @@ class IncomingCallFragment : Fragment() {
 
     }
 
-    private val invitationBroadcastManager = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val type = intent!!.getParcelableExtra<CallingData>("data")
-            when (type!!.type) {
-                REMOTE_MSG_INVITATION_ACCEPTED -> {
 
-                }
-                REMOTE_MSG_INVITATION_REJECTED -> {
-                    findNavController().navigateUp()
-                }
-                REMOTE_MSG_INVITATION_CANCEL -> {
-                    findNavController().navigateUp()
-                }
-            }
-            Log.e("tttttttttIn","InCome")
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(
-                invitationBroadcastManager,
-                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
-            )
-    }
-
-    override fun onStop() {
-        super.onStop()
-        LocalBroadcastManager.getInstance(requireContext())
-            .unregisterReceiver(invitationBroadcastManager)
-    }
 
 }
