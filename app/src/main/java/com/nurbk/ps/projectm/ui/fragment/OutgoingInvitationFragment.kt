@@ -21,9 +21,14 @@ import com.nurbk.ps.projectm.network.ApiClient
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.utils.PreferencesManager
 import okhttp3.ResponseBody
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URL
+import java.util.*
+
 
 class OutgoingInvitationFragment : Fragment() {
 
@@ -31,6 +36,10 @@ class OutgoingInvitationFragment : Fragment() {
     private lateinit var argumentData: Bundle
     private lateinit var user: User
     private var typeMeeting = CALL_VIDEO
+    private var meetingRoom = ""
+    private var isAudio = false
+
+
     private val userProfile by lazy {
         PreferencesManager(requireContext()).getUserProfile()
     }
@@ -55,6 +64,7 @@ class OutgoingInvitationFragment : Fragment() {
         mBinding.user = user
 
         if (argumentData.getString(TYPE_CALL) == CALL_AUDIO) {
+            isAudio = true
             mBinding.imageTypeCall.setImageResource(R.drawable.ic_baseline_call_24)
             typeMeeting = CALL_AUDIO
         }
@@ -67,12 +77,15 @@ class OutgoingInvitationFragment : Fragment() {
     }
 
     private fun sendRemoteMessage(type: String) {
+        meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
+
         PushCalling(
             CallingData(
                 name = userProfile.name, meetingType = typeMeeting,
                 type = type, email = userProfile.email,
                 senderToken = userProfile.token,
-                receiverToken = user.token
+                receiverToken = user.token,
+                meetingRoom = meetingRoom
             ),
             user.token
         ).also {
@@ -85,7 +98,6 @@ class OutgoingInvitationFragment : Fragment() {
                         response: Response<ResponseBody>
                     ) {
                         if (response.isSuccessful)
-                            Log.e("ttttttttttttisSucc", response.body().toString())
                         else {
                             Log.e("tttttttttttt", response.errorBody().toString())
 
@@ -100,39 +112,5 @@ class OutgoingInvitationFragment : Fragment() {
 
     }
 
-    private val invitationBroadcastManager = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val type = intent!!.getParcelableExtra<CallingData>("data")
-            when (type!!.type) {
-                REMOTE_MSG_INVITATION_ACCEPTED -> {
-
-                }
-                REMOTE_MSG_INVITATION_REJECTED -> {
-                    findNavController().navigateUp()
-                }
-                REMOTE_MSG_INVITATION_CANCEL -> {
-                    findNavController().navigateUp()
-                }
-            }
-
-            Log.e("tttttttttIn","Outgoing")
-
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(
-                invitationBroadcastManager,
-                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
-            )
-    }
-
-    override fun onStop() {
-        super.onStop()
-        LocalBroadcastManager.getInstance(requireContext())
-            .unregisterReceiver(invitationBroadcastManager)
-    }
 
 }
