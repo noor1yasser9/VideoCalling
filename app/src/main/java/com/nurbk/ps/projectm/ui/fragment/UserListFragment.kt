@@ -20,10 +20,7 @@ import com.nurbk.ps.projectm.adapter.UserListAdapter
 import com.nurbk.ps.projectm.databinding.FragmentUserListBinding
 import com.nurbk.ps.projectm.model.CallingData
 import com.nurbk.ps.projectm.model.User
-import com.nurbk.ps.projectm.others.CALL_AUDIO
-import com.nurbk.ps.projectm.others.CALL_VIDEO
-import com.nurbk.ps.projectm.others.TYPE_CALL
-import com.nurbk.ps.projectm.others.USER_DATA
+import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.service.MessagingServiceFirebase
 import com.nurbk.ps.projectm.ui.activity.MainActivity
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
@@ -99,18 +96,18 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         mBinding.rcDataList.adapter = userAdapter
 
 
-        if (requireActivity().intent.getBooleanExtra("d", false)) {
-            findNavController().navigate(
-                R.id.action_userListFragment_to_callFragment,
-                Bundle().apply {
-                    putParcelable(
-                        USER_DATA,
-                        requireActivity().intent.getParcelableExtra<CallingData>("data")
-                    )
-                    putString(TYPE_CALL, CALL_AUDIO)
-                })
-
-        }
+//        if (requireActivity().intent.getBooleanExtra("d", false)) {
+//            findNavController().navigate(
+//                R.id.action_userListFragment_to_callFragment,
+//                Bundle().apply {
+//                    putParcelable(
+//                        USER_DATA,
+//                        requireActivity().intent.getParcelableExtra<CallingData>("data")
+//                    )
+//                    putString(TYPE_CALL, CALL_AUDIO)
+//                })
+//
+//        }
     }
 
 
@@ -151,5 +148,39 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
     }
 
+
+    private val invitationBroadcastManager = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val type = intent!!.getParcelableExtra<CallingData>("data")
+            when (type!!.type) {
+                REMOTE_MSG_INVITATION -> {
+                    findNavController().navigate(
+                        R.id.action_userListFragment_to_callFragment,
+                        Bundle().apply {
+                            putParcelable(
+                                USER_DATA,
+                                type
+                            )
+                            putString(TYPE_CALL, CALL_AUDIO)
+                        })
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(
+                invitationBroadcastManager,
+                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+            )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LocalBroadcastManager.getInstance(requireContext())
+            .unregisterReceiver(invitationBroadcastManager)
+    }
 
 }

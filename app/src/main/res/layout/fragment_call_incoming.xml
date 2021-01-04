@@ -76,7 +76,7 @@
             tools:text="Noor Yasser" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/btnStartCall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
@@ -110,7 +110,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toEndOf="@+id/btnStartCall"
             app:srcCompat="@drawable/ic_baseline_call_end_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

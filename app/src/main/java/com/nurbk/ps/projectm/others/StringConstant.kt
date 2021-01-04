@@ -24,10 +24,17 @@ const val VALUE_TYPE = "application/json"
 
 const val REMOTE_MSG_TYPE = "type"
 const val REMOTE_MSG_INVITATION = "invitation"
+
+
 const val REMOTE_MSG_MEETING_TYPE = "meetingType"
-const val REMOTE_MSG_INVITER_TOKEN="inviterToken"
-const val REMOTE_MSG_DATA="data"
-const val REMOTE_MSG_REGISTRATION_IDS="registration_ids"
+const val REMOTE_MSG_INVITER_TOKEN = "inviterToken"
+const val REMOTE_MSG_DATA = "data"
+const val REMOTE_MSG_REGISTRATION_IDS = "registration_ids"
+
+const val REMOTE_MSG_INVITATION_RESPONSE = "invitationResponse"
+const val REMOTE_MSG_INVITATION_ACCEPTED = "accepted"
+const val REMOTE_MSG_INVITATION_REJECTED = "rejected"
+const val REMOTE_MSG_INVITATION_CANCEL = "cancel"
 
 fun mapRemoteHeaders() = HashMap<String, String>().apply {
     put(REMOTE_MSG_AUTHORIZATION, AUTH_VALUE)

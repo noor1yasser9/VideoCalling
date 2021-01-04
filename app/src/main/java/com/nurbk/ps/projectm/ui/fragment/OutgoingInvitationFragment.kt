@@ -1,11 +1,16 @@
 package com.nurbk.ps.projectm.ui.fragment
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentOutgoingInvitationBinding
@@ -51,21 +56,23 @@ class OutgoingInvitationFragment : Fragment() {
 
         if (argumentData.getString(TYPE_CALL) == CALL_AUDIO) {
             mBinding.imageTypeCall.setImageResource(R.drawable.ic_baseline_call_24)
-            typeMeeting=CALL_AUDIO
+            typeMeeting = CALL_AUDIO
         }
         mBinding.btnCancelCall.setOnClickListener {
+            sendRemoteMessage(REMOTE_MSG_INVITATION_CANCEL)
             findNavController().navigateUp()
         }
-        sendRemoteMessage()
+        sendRemoteMessage(REMOTE_MSG_INVITATION)
 
     }
 
-    private fun sendRemoteMessage() {
+    private fun sendRemoteMessage(type: String) {
         PushCalling(
             CallingData(
                 name = userProfile.name, meetingType = typeMeeting,
-                type = REMOTE_MSG_INVITATION, email = userProfile.email,
-                inviterToken = userProfile.token
+                type = type, email = userProfile.email,
+                senderToken = userProfile.token,
+                receiverToken = user.token
             ),
             user.token
         ).also {
@@ -93,5 +100,39 @@ class OutgoingInvitationFragment : Fragment() {
 
     }
 
+    private val invitationBroadcastManager = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val type = intent!!.getParcelableExtra<CallingData>("data")
+            when (type!!.type) {
+                REMOTE_MSG_INVITATION_ACCEPTED -> {
+
+                }
+                REMOTE_MSG_INVITATION_REJECTED -> {
+                    findNavController().navigateUp()
+                }
+                REMOTE_MSG_INVITATION_CANCEL -> {
+                    findNavController().navigateUp()
+                }
+            }
+
+            Log.e("tttttttttIn","Outgoing")
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(
+                invitationBroadcastManager,
+                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+            )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LocalBroadcastManager.getInstance(requireContext())
+            .unregisterReceiver(invitationBroadcastManager)
+    }
 
 }
