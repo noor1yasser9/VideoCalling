@@ -33,15 +33,15 @@
 
 - ## Firebase Cloud Messaging
     
-           ```groovy
+
         dependencies {
             implementation 'com.google.firebase:firebase-messaging'
         }
-        ```
+
         
      - A service that extends FirebaseMessagingService. This is required if you want to do any message handling beyond receiving notifications on apps in the background. To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service.
      
-          ```groovy
+   ```groovy
         <service
             android:name=".java.MyFirebaseMessagingService"
             android:exported="false">
@@ -59,11 +59,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-        ```
+     ```
 
 - ## Android architecture components
     
-         ```groovy
+     
           dependencies {
                     // navigation
                     implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
@@ -78,23 +78,23 @@
 
 - ## Retrofit
 
-       ```groovy
+  
               dependencies {
                    // Retrofit
                   implementation 'com.squareup.retrofit2:retrofit:2.9.0'
                   implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
                   implementation 'com.squareup.okhttp3:okhttp:4.9.0'
                }
-       ```
+  
   
 - ## MultiDex
 
-       ```groovy
-              dependencies {
+
+         dependencies {
             //MultiDex
             implementation 'androidx.multidex:multidex:2.0.1'
-               }
-        ```
+             }
+
         
 # For the Video Call I used SDK <a href ="https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk">JITSI</a>
    
@@ -103,7 +103,7 @@
 
         The repository typically goes into the build.gradle file in the root of your project:
 
-               ```groovy
+         
                     allprojects {
                         repositories {
                             google()
@@ -113,16 +113,16 @@
                             }
                         }
                     }
-                ```
+   
         Dependency definitions belong in the individual module build.gradle files:        
 
 
-               ```groovy    
+              
                     dependencies {
                         // (other dependencies)
                         implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
                     }
-                ```
+           
      - JitsiMeetConferenceOptions
          This object encapsulates all the options that can be tweaked when joining a conference.
        <br />
