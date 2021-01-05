@@ -62,8 +62,20 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         ```
-     
-     
+
+- ## Android architecture components
+    
+           ```groovy
+        dependencies {
+            // navigation
+            implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
+            implementation "androidx.navigation:navigation-ui-ktx:2.3.2"
+            
+            // ViewModel &  LiveData
+            implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+            implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+        }
+        ```
 
 
 
