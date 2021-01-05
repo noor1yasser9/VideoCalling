@@ -15,7 +15,6 @@
     1. If you haven't already, <a href="https://firebase.google.com/docs/android/setup?authuser=0">add Firebase to your Android project</a>.
     2. Using the <a href="https://firebase.google.com/docs/android/learn-more?authuser=0#bom">Firebase Android BoM</a>, declare the dependency for the Firebase Authentication Android library in your <b>module (app-level) Gradle file</b> (usually app/build.gradle).   <br />
 
-       ```groovy
            dependencies {
              // Import the BoM for the Firebase platform
               implementation platform('com.google.firebase:firebase-bom:26.2.0')
@@ -24,15 +23,14 @@
               // When using the BoM, you don't specify versions in Firebase library dependencies
               implementation 'com.google.firebase:firebase-auth'
            }
-        ```
+           
  <br /> <br />
 - ## Cloud Firestore
 
-       ```groovy
         dependencies {
             implementation 'com.google.firebase:firebase-admin:7.1.0'
         }
-        ```
+
 - ## Firebase Cloud Messaging
     
            ```groovy
