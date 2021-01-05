@@ -73,7 +73,7 @@
                     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
                     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
           }
-        ```
+
 
 
 - ## Retrofit
@@ -128,7 +128,6 @@
        <br />
         Example:
 
-               ```groovy    
                     JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
                         .setServerURL(new URL("https://meet.jit.si"))
                         .setRoom("test123")
@@ -137,6 +136,6 @@
                         .setAudioOnly(false)
                         .setWelcomePageEnabled(false)
                         .build();
-                ```
+
 
 
