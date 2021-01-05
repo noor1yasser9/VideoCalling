@@ -25,7 +25,7 @@
               implementation 'com.google.firebase:firebase-auth'
            }
         ```
- <br />
+ <br /> <br />
 - ## Cloud Firestore
 
        ```groovy
