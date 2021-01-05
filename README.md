@@ -80,17 +80,18 @@
 
 - ## Retrofit
 
- ```groovy
-      dependencies {
-           // Retrofit
-          implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-          implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-          implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-       }
-  ```
+       ```groovy
+              dependencies {
+                   // Retrofit
+                  implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+                  implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+                  implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+               }
+       ```
+  
 - ## MultiDex
 
-           ```groovy
+          ```groovy
         dependencies {
             //MultiDex
             implementation 'androidx.multidex:multidex:2.0.1'
