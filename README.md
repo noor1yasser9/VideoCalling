@@ -10,7 +10,7 @@
 
 
 # Used libraries
-- ## Firebase
+- ## Firebase Auth
 - ### Before you begin
     1. If you haven't already, <a href="https://firebase.google.com/docs/android/setup?authuser=0">add Firebase to your Android project</a>.
     2. Using the <a href="https://firebase.google.com/docs/android/learn-more?authuser=0#bom">Firebase Android BoM</a>, declare the dependency for the Firebase Authentication Android library in your <b>module (app-level) Gradle file</b> (usually app/build.gradle).
@@ -25,4 +25,46 @@
             implementation 'com.google.firebase:firebase-auth'
         }
      ```
+     <br />
+- ## Cloud Firestore
 
+       ```groovy
+        dependencies {
+            implementation 'com.google.firebase:firebase-admin:7.1.0'
+        }
+        ```
+- ## Firebase Cloud Messaging
+    
+           ```groovy
+        dependencies {
+            implementation 'com.google.firebase:firebase-messaging'
+        }
+        ```
+        
+     - A service that extends FirebaseMessagingService. This is required if you want to do any message handling beyond receiving notifications on apps in the background. To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service.
+     
+          ```groovy
+        <service
+            android:name=".java.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+             <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_ic_notification" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        ```
+     
+     
+
+
+
+        
