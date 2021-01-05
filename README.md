@@ -127,7 +127,8 @@
                 ```
      - JitsiMeetConferenceOptions
          This object encapsulates all the options that can be tweaked when joining a conference.
-         Example:
+       <br />
+        Example:
 
                ```groovy    
                     JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
