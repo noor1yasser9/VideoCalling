@@ -12,5 +12,5 @@
 # Used libraries
 - ## Firebase
 - ### Before you begin
-    1. If you haven't already, <a href"https://firebase.google.com/docs/android/setup?authuser=0">add Firebase to your Android project</a>.
+    1. If you haven't already, <a href "https://firebase.google.com/docs/android/setup?authuser=0" >add Firebase to your Android project</a>.
 
