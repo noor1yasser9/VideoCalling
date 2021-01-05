@@ -65,8 +65,8 @@
 
 - ## Android architecture components
     
-           ```groovy
-        dependencies {
+ ```groovy
+  dependencies {
             // navigation
             implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
             implementation "androidx.navigation:navigation-ui-ktx:2.3.2"
@@ -74,9 +74,26 @@
             // ViewModel &  LiveData
             implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
             implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-        }
+  }
+```
+
+
+- ## Retrofit
+
+ ```groovy
+      dependencies {
+           // Retrofit
+          implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+          implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+          implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+       }
+  ```
+- ## MultiDex
+
+           ```groovy
+        dependencies {
+            //MultiDex
+            implementation 'androidx.multidex:multidex:2.0.1'
+              }
         ```
-
-
-
         
