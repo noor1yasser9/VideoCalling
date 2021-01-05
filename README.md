@@ -91,10 +91,53 @@
   
 - ## MultiDex
 
-          ```groovy
-        dependencies {
+       ```groovy
+              dependencies {
             //MultiDex
             implementation 'androidx.multidex:multidex:2.0.1'
-              }
+               }
         ```
         
+# For the Video Call I used SDK <a href ="https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk">JITSI</a>
+   
+   ### Use pre-build SDK artifacts/binaries
+   - In your project, add the Maven repository https://github.com/jitsi/jitsi-maven-repository/raw/master/releases and the dependency org.jitsi.react:jitsi-meet-sdk into your build.gradle files.
+
+        The repository typically goes into the build.gradle file in the root of your project:
+
+               ```groovy
+                    allprojects {
+                        repositories {
+                            google()
+                            jcenter()
+                            maven {
+                                url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+                            }
+                        }
+                    }
+                ```
+        Dependency definitions belong in the individual module build.gradle files:        
+
+
+               ```groovy    
+                    dependencies {
+                        // (other dependencies)
+                        implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
+                    }
+                ```
+     - JitsiMeetConferenceOptions
+         This object encapsulates all the options that can be tweaked when joining a conference.
+         Example:
+
+               ```groovy    
+                    JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
+                        .setServerURL(new URL("https://meet.jit.si"))
+                        .setRoom("test123")
+                        .setAudioMuted(false)
+                        .setVideoMuted(false)
+                        .setAudioOnly(false)
+                        .setWelcomePageEnabled(false)
+                        .build();
+                ```
+
+
