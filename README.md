@@ -14,7 +14,7 @@
 - ### Before you begin
     1. If you haven't already, <a href="https://firebase.google.com/docs/android/setup?authuser=0">add Firebase to your Android project</a>.
     2. Using the <a href="https://firebase.google.com/docs/android/learn-more?authuser=0#bom">Firebase Android BoM</a>, declare the dependency for the Firebase Authentication Android library in your <b>module (app-level) Gradle file</b> (usually app/build.gradle).
-    
+        <br />
     ```groovy
         dependencies {
             // Import the BoM for the Firebase platform
