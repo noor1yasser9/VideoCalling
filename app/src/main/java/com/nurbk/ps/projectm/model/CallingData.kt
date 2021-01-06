@@ -14,6 +14,7 @@ class CallingData(
     val registration_ids: String = "",
     val name: String = "",
     val email: String = "",
+    val meetingRoom: String = "",
     val acceptedOrRejected: Boolean = false
 ) : Parcelable
 

@@ -37,9 +37,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtEmail"
-                android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -48,28 +48,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:hint="@string/password"
             app:boxStrokeColor="@color/box_input_text_color"
             app:hintTextColor="@color/box_input_text_color"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="@string/password"
-            app:passwordToggleEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-            app:layout_constraintWidth_percent="0.8">
+            app:layout_constraintWidth_percent="0.8"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtPassword"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSinIn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorOrange_100"
             android:layout_marginTop="20dp"
+            android:backgroundTint="@color/colorOrange_100"
             android:text="@string/sigin"
             android:textAllCaps="false"
             android:textSize="@dimen/_12ssp"
@@ -95,19 +95,36 @@
 
         <TextView
             android:id="@+id/btnSignUp"
+            style="@style/clickableBorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
             android:text="@string/sigup"
             android:textColor="@color/colorOrange_100"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
-            style="@style/clickableBorder"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/blue_200"
+            android:text="@string/login_with_facebock"
+            android:textAllCaps="false"
+            app:cornerRadius="@dimen/_8sdp"
+            app:icon="@drawable/ic_baseline_facebook_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

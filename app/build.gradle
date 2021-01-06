@@ -49,7 +49,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
+    implementation ('org.jitsi.react:jitsi-meet-sdk:2.11.0') { transitive = true }
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
@@ -84,5 +84,7 @@ dependencies {
 
     //facebook-login
     implementation 'com.facebook.android:facebook-login:5.11.0'
+
+
 
 }

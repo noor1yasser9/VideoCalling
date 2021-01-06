@@ -53,7 +53,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onCall() {
-        Log.e("tttttt", "oncall")
-    }
+
 }

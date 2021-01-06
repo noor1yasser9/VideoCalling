@@ -13,4 +13,10 @@
     <string name="do_you_have_an_account">Do you have an account</string>
     <string name="incoming_meeting_invitation">Incoming Meeting invitation</string>
     <string name="send_meeting_invitation">Send Meeting Invitation</string>
+
+
+    <string name="facebook_app_id">2757523621229762</string>
+    <string name="fb_login_protocol_scheme">fb2757523621229762</string>
+    <string name="login_with_facebock">Login With Facebock</string>
+
 </resources>
