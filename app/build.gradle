@@ -9,14 +9,7 @@ plugins {
 
 
 android {
-    signingConfigs {
-        ASD {
-            storeFile file('D:\\Desktop\\My project\\Android\\ProjectM\\gradle.properties')
-            storePassword 'asd'
-            keyAlias 'asd'
-            keyPassword 'asd'
-        }
-    }
+
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -48,11 +41,7 @@ android {
         enabled true
     }
 
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['src/main/jniLibs']
-//        }
-//    }
+
 }
 
 dependencies {
@@ -66,12 +55,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-//    implementation ('org.jitsi.react:jitsi-meet-sdk:2.11.0') { transitive = true }
 
     implementation 'io.agora.rtc:full-sdk:2.3.3'
 
-//    implementation 'com.opentok.android:opentok-android-sdk:2.18.1'
-//    implementation 'pub.devrel:easypermissions:3.0.0'
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"

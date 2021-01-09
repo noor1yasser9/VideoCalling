@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="message"
+            type="com.nurbk.ps.projectm.model.Message" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <com.klinker.android.simple_videoview.SimpleVideoView
+            android:id="@+id/video_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/bg_video"
+            app:loop="false"
+            app:muted="false"
+            app:showSpinner="false"
+            app:stopSystemAudio="false"
+            />
+
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            tools:text="00.20" />
+    </LinearLayout>
+</layout>
