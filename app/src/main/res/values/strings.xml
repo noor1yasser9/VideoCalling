@@ -18,5 +18,17 @@
     <string name="facebook_app_id">2757523621229762</string>
     <string name="fb_login_protocol_scheme">fb2757523621229762</string>
     <string name="login_with_facebock">Login With Facebock</string>
+    <string name="record_failed">You can\'t record a voice message while you\'re recording in another app</string>
+
+
+    <!-- PLEASE KEEP THIS App ID IN SAFE PLACE -->
+    <!-- Get your own App ID at https://dashboard.agora.io/ -->
+    <!-- After you entered the App ID, remove <##> outside of Your App ID -->
+    <string name="agora_app_id">ca500dfe76d440dc9cde66b97cee9f80</string>
+<!--    <string name="agora_app_id">1f89081b505f43c289e669e1ca57df3b</string>-->
+    <!-- Obtain a temp Access Token at https://dashboard.agora.io -->
+    <!-- You will need to deploy your own token server for production release -->
+    <!-- Leave this value empty if Security keys/Token is not enabled for your project -->
+    <string name="agora_access_token"></string>
 
 </resources>

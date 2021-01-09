@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/sigInFragment"
         android:name="com.nurbk.ps.projectm.ui.fragment.SigInFragment"
-        android:label="SigInFragment" >
+        android:label="SigInFragment">
         <action
             android:id="@+id/action_sigInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -22,13 +22,19 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.nurbk.ps.projectm.ui.fragment.UserListFragment"
-        android:label="UserListFragment" >
+        android:label="UserListFragment">
         <action
             android:id="@+id/action_userListFragment_to_callFragment"
-            app:destination="@id/callFragment" />
+            app:destination="@id/callFragment"
+         />
         <action
             android:id="@+id/action_userListFragment_to_outgoingInvitationFragment"
-            app:destination="@id/outgoingInvitationFragment" />
+            app:destination="@id/outgoingInvitationFragment"
+
+            />
+        <action
+            android:id="@+id/action_userListFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/callFragment"
@@ -38,4 +44,17 @@
         android:id="@+id/outgoingInvitationFragment"
         android:name="com.nurbk.ps.projectm.ui.fragment.OutgoingInvitationFragment"
         android:label="OutgoingInvitationFragment" />
+    <fragment
+        android:id="@+id/call"
+        android:name="com.nurbk.ps.projectm.ui.fragment.VideoCallingFragment"
+        android:label="Call" />
+
+    <action
+        android:id="@+id/action_to_call"
+        app:destination="@id/call"
+        app:popUpTo="@id/userListFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.ChatFragment"
+        android:label="ChatFragment" />
 </navigation>

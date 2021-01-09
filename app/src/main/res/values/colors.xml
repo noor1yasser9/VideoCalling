@@ -12,4 +12,21 @@
     <color name="colorOrange_100">#7A4F00</color>
     <color name="blue_100">#06323D</color>
     <color name="blue_200">#3F51B5</color>
+
+    <!-- Chat Activity -->
+    <color name="localBackground">#827b92</color>
+    <color name="remoteBackground">#484258</color>
+
+    <item name="cardBackground" type="color">#f6f6f6</item>
+    <color name="textColor">#999DA4</color>
+
+    <color name="colorProgressBackgroundNormal">#33000000</color>
+    <color name="white_disabled_material">#FFFFFF</color>
+    <color name="colorControlActivated">#444444</color>
+    <color name="colorPrimary">#425C59</color>
+    <color name="colorPrimary2">#3E3E3E</color>
+    <color name="colorAccent">#FFCEA3</color>
+    <color name="transparent">#00000000</color>
+    <color name="edittextColor">#DDDDDD</color>
+    <color name="grey">#AAAAAA</color>
 </resources>
