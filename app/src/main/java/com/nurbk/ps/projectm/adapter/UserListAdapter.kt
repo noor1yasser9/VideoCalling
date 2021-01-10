@@ -1,7 +1,9 @@
 package com.nurbk.ps.projectm.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nurbk.ps.projectm.R
@@ -10,6 +12,8 @@ import com.nurbk.ps.projectm.model.User
 
 class UserListAdapter(val userList: ArrayList<User>, val userListener: UserListener) :
     RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
+
+    val userSelected = ArrayList<User>()
 
     inner class UserListViewHolder(val mBinding: ItemUserListBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
@@ -22,6 +26,36 @@ class UserListAdapter(val userList: ArrayList<User>, val userListener: UserListe
             mBinding.btnCallvideo.setOnClickListener {
                 userListener.initiateVideoMeeting(user)
             }
+
+            mBinding.cardRoot.setOnLongClickListener {
+                userSelected.add(user)
+                mBinding.imageSelected.visibility = View.VISIBLE
+                mBinding.group.visibility = View.INVISIBLE
+                userListener.onMultipleUserAction(true)
+                true
+            }
+            mBinding.cardRoot.setOnClickListener {
+                if (mBinding.imageSelected.isVisible) {
+                    userSelected.remove(user)
+                    mBinding.imageSelected.visibility = View.GONE
+                    mBinding.group.visibility = View.VISIBLE
+                    if (userSelected.size == 0)
+                        userListener.onMultipleUserAction(false)
+                } else {
+                    if (userSelected.size > 0) {
+                        userSelected.add(user)
+                        mBinding.imageSelected.visibility = View.VISIBLE
+                        mBinding.group.visibility = View.INVISIBLE
+
+                    }
+
+                }
+            }
+
+            mBinding.root.setOnClickListener {
+                userListener.onItemClickListener(user)
+            }
+
         }
     }
 
@@ -46,5 +80,7 @@ class UserListAdapter(val userList: ArrayList<User>, val userListener: UserListe
     interface UserListener {
         fun initiateVideoMeeting(user: User)
         fun initiateAudioMeeting(user: User)
+        fun onMultipleUserAction(isMultipleUserSelected: Boolean)
+        fun onItemClickListener(user: User)
     }
 }
