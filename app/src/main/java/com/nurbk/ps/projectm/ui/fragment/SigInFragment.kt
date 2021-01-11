@@ -1,21 +1,28 @@
 package com.nurbk.ps.projectm.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import com.google.gson.Gson
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentSignInBinding
+import com.nurbk.ps.projectm.model.fb.FB
 import com.nurbk.ps.projectm.others.IS_SIGN_IN
-import com.nurbk.ps.projectm.others.USER_DATA_PROFILE
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.SignInAuthViewModel
 import com.nurbk.ps.projectm.utils.PreferencesManager
+import java.util.*
+
 
 class SigInFragment : Fragment() {
 
@@ -35,6 +42,8 @@ class SigInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         mBinding = FragmentSignInBinding.inflate(inflater, container, false)
             .apply { executePendingBindings() }
 
@@ -63,12 +72,15 @@ class SigInFragment : Fragment() {
 
         viewModel.getSignIn().observe(viewLifecycleOwner) {
             val isSignI =
-                PreferencesManager(requireContext()).getPreferences()!!.getBoolean(IS_SIGN_IN, false)
+                PreferencesManager(requireContext()).getPreferences()!!.getBoolean(
+                    IS_SIGN_IN,
+                    false
+                )
 
             if (it) {
                 try {
                     if (isSignI)
-                        findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
+                        findNavController().navigate(R.id.action_users_list_fragment)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -77,8 +89,52 @@ class SigInFragment : Fragment() {
                 loadingDialog.dismiss()
         }
 
+        if (PreferencesManager(requireContext()).getPreferences()!!.getBoolean(IS_SIGN_IN, false)) {
+            findNavController().navigate(R.id.action_users_list_fragment)
+        }
 
 
+        callbackManager = CallbackManager.Factory.create();
+
+
+        mBinding.loginButton.setOnClickListener {
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
+            LoginManager.getInstance().logInWithReadPermissions(
+                this, Arrays.asList("public_profile")
+            );
+
+            LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult?> {
+                    override fun onSuccess(loginResult: LoginResult?) {
+                        // App code
+                        val batch = GraphRequestBatch(
+                            GraphRequest.newMeRequest(
+                                loginResult!!.accessToken
+                            ) { jsonObject, response ->
+//                                val fb = Gson().fromJson(response.toString(), FB::class.java)
+
+                            },
+                            GraphRequest.newMyFriendsRequest(
+                                loginResult.accessToken
+                            ) { jsonArray, response ->
+
+                            }
+                        )
+                        batch.executeAsync()
+                    }
+
+                    override fun onCancel() = Unit
+
+                    override fun onError(exception: FacebookException) = Unit
+                })
+        }
     }
 
+
+    private var callbackManager: CallbackManager? = null
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager!!.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }

@@ -13,7 +13,12 @@ class MainUserListViewModel(application: Application) : AndroidViewModel(applica
 
     val getAllUserLiveData = mainUserRepository.getAllUserLiveData
 
-    fun updateUser(map: Map<String, String>, id: String, onComplete: () -> Unit) =
+    fun updateUser(
+        map: Map<String, String>,
+        id: String,
+        collectionName: String,
+        onComplete: () -> Unit
+    ) =
         mainUserRepository.updateData(map, id, onComplete)
 
     fun getUpdate() = mainUserRepository.getUpdateLiveData()
@@ -22,10 +27,11 @@ class MainUserListViewModel(application: Application) : AndroidViewModel(applica
 
     fun getLogOut() = mainUserRepository.logOut()
 
-    fun getProfile(onComplete: () -> Unit) = mainUserRepository.signInRepository.getProfileData(
-        FirebaseAuth.getInstance().currentUser!!.uid,
-        onComplete
-    )
+     fun getProfile(onComplete: () -> Unit) =
+        mainUserRepository.signInRepository.getProfileData(
+            FirebaseAuth.getInstance().currentUser!!.uid,
+            onComplete
+        )
 
 
     init {

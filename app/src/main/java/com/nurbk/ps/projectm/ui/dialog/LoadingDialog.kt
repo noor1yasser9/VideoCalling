@@ -19,6 +19,8 @@ class LoadingDialog : DialogFragment() {
         mBinding = DialogLoadingBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
+        dialog!!.requestWindowFeature(STYLE_NO_TITLE)
+        dialog!!.setCancelable(false)
         return mBinding.root
     }
 }

@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -15,6 +16,7 @@ import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.ActivityMainBinding
 import com.nurbk.ps.projectm.others.IS_SIGN_IN
 import com.nurbk.ps.projectm.utils.PreferencesManager
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,21 +39,19 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mBinding.toolbar)
 
         navHostFragment.navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, arguments: Bundle? ->
-            when (destination.id) {
-                R.id.sigInFragment, R.id.signUpFragment -> {
-                    mBinding.toolbar.isVisible = false
-                }
-            }
-        }
-
-        if (PreferencesManager(this).getPreferences()!!.getBoolean(IS_SIGN_IN, false)) {
-            val graph = navHostFragment.navController
-                .navInflater.inflate(R.navigation.nav_home)
-            graph.startDestination = R.id.userListFragment
-            navHostFragment.navController.graph = graph
+            mBinding.toolbar.isVisible = false
         }
 
     }
 
+    override fun onBackPressed() {
 
+        val navigationController = nav_host_fragment.findNavController()
+        if (navigationController.currentDestination?.id == R.id.userListFragment) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+
+    }
 }

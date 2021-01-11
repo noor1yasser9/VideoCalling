@@ -20,8 +20,8 @@ import com.nurbk.ps.projectm.network.ApiClient
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.ui.activity.MainActivity
 import okhttp3.ResponseBody
-import org.jitsi.meet.sdk.JitsiMeetActivity
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
+//import org.jitsi.meet.sdk.JitsiMeetActivity
+//import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,7 +48,7 @@ class IncomingCallFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataCalling = argumentData.getParcelable<CallingData>(USER_DATA)!!
+        dataCalling = argumentData.getParcelable(USER_DATA)!!
         mBinding.data = dataCalling
 
         if (dataCalling.meetingType == CALL_AUDIO) {
@@ -86,25 +86,11 @@ class IncomingCallFragment : Fragment() {
                         response: Response<ResponseBody>
                     ) {
                         if (response.isSuccessful) {
-
-                            try {
-
-                                val server = URL("https://meet.jit.si")
-                                val options = JitsiMeetConferenceOptions.Builder()
-                                    .setServerURL(server)
-                                    .setRoom(dataCalling.meetingRoom)
-                                    .setWelcomePageEnabled(false)
-                                    .setVideoMuted(isAudio)
-                                    .build()
-                                JitsiMeetActivity.launch(requireContext(), options)
-                                findNavController().navigateUp()
-
-                            } catch (e: Exception) {
-                                e.printStackTrace()
+                            if (type == REMOTE_MSG_INVITATION_ACCEPTED) {
+                                val bundle = Bundle()
+                                bundle.putParcelable(DATA_CALLING, dataCalling)
+                                findNavController().navigate(R.id.action_to_call, bundle)
                             }
-                        } else {
-                            Log.e("tttttttttttt", response.errorBody().toString())
-
                         }
                     }
 
@@ -116,6 +102,36 @@ class IncomingCallFragment : Fragment() {
 
     }
 
+    private val invitationBroadcastManager = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val type = intent!!.getParcelableExtra<CallingData>("data")
+            when (type!!.type) {
+                REMOTE_MSG_INVITATION_ACCEPTED -> {
 
+                }
+                REMOTE_MSG_INVITATION_REJECTED -> {
+                    findNavController().navigateUp()
+                }
+                REMOTE_MSG_INVITATION_CANCEL -> {
+                    findNavController().navigateUp()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(
+                invitationBroadcastManager,
+                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+            )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LocalBroadcastManager.getInstance(requireContext())
+            .unregisterReceiver(invitationBroadcastManager)
+    }
 
 }

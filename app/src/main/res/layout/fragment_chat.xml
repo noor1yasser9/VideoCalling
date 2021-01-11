@@ -15,8 +15,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
-            android:background="@drawable/bg"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/bg">
 
 
             <View
@@ -30,26 +30,27 @@
 
             <TextView
                 android:id="@+id/txtNameUSer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:maxLength="25"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+                app:layout_constraintEnd_toStartOf="@+id/btnCallAudio"
                 app:layout_constraintStart_toEndOf="@+id/materialCardView"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Noor Yasser"
 
-                />
+                app:layout_constraintTop_toTopOf="@+id/materialCardView"
+                tools:text="Noor Yasser" />
 
 
             <ImageView
                 android:id="@+id/btnCallAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view2"
                 app:layout_constraintEnd_toStartOf="@+id/btnCallVideo"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,8 +59,8 @@
 
             <ImageView
                 android:id="@+id/btnCallVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,16 +111,17 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/typingStatus"
-                android:layout_width="30dp"
+                android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:layout_above="@id/msgData"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_typing"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/msgData"
                 app:layout_constraintStart_toStartOf="parent"
                 app:lottie_autoPlay="true"
-                app:lottie_colorFilter="@color/white"
+                app:lottie_colorFilter="@android:color/black"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/typing_animation"
                 app:lottie_repeatCount="50" />
@@ -198,7 +200,6 @@
                     android:background="@drawable/mic_background"
                     android:elevation="3dp"
                     android:scaleType="center"
-                    android:tint="@color/colorAccent"
                     app:mic_icon="@drawable/ic_mic" />
 
 

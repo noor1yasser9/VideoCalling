@@ -38,6 +38,8 @@ class SignUpRepository private constructor(context: Context) {
                     sendEmailVerification(user)
                 } else {
                     sigUpLiveData.postValue(false)
+                    Log.e("ttttttt", it.exception!!.message.toString())
+
                 }
             }
 
@@ -56,7 +58,8 @@ class SignUpRepository private constructor(context: Context) {
                         user.image,
                     )
                 )
-            }
+            } else
+                Log.e("ttttttt", it.exception!!.message.toString())
         }
     }
 

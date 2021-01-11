@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,25 +16,19 @@
             android:id="@+id/remote_video_view_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/remoteBackground" />
+
+        <RelativeLayout
+            android:id="@+id/videoStop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/remoteBackground">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@id/icon_padding">
-
-                <ImageView
-                    android:layout_width="@dimen/remote_back_icon_size"
-                    android:layout_height="@dimen/remote_back_icon_size"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/icon_agora_largest" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/icon_padding"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/remote_back_icon_margin_bottom"
-                android:layout_alignParentBottom="true" />
+            <ImageView
+                android:layout_width="@dimen/remote_back_icon_size"
+                android:layout_height="@dimen/remote_back_icon_size"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_agora_largest" />
         </RelativeLayout>
 
         <FrameLayout
@@ -46,8 +41,7 @@
             android:layout_marginTop="@dimen/local_preview_margin_top"
             android:layout_marginEnd="@dimen/local_preview_margin_right"
             android:layout_marginRight="@dimen/local_preview_margin_right"
-            android:background="@color/localBackground"
-            >
+            android:background="@color/localBackground">
 
             <ImageView
                 android:layout_width="@dimen/local_back_icon_size"
@@ -57,51 +51,67 @@
                 android:src="@drawable/icon_agora_large" />
         </FrameLayout>
 
-        <RelativeLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/control_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/control_bottom_margin">
-
-            <ImageView
-                android:id="@+id/btn_call"
-                android:layout_width="@dimen/call_button_size"
-                android:layout_height="@dimen/call_button_size"
-                android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/btn_endcall" />
+            android:layout_marginBottom="@dimen/control_bottom_margin"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/btn_switch_camera"
                 android:layout_width="@dimen/other_button_size"
                 android:layout_height="@dimen/other_button_size"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/control_bottom_horizontal_margin"
-                android:layout_toEndOf="@id/btn_call"
-                android:layout_toRightOf="@id/btn_call"
                 android:scaleType="centerCrop"
-                android:src="@drawable/btn_switch_camera" />
+                android:src="@drawable/btn_switch_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_call"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_call"
+                android:layout_width="@dimen/call_button_size"
+                android:layout_height="@dimen/call_button_size"
+                android:layout_marginBottom="32dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/btn_endcall"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_mute"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btn_switch_camera"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/btn_mute"
                 android:layout_width="@dimen/other_button_size"
                 android:layout_height="@dimen/other_button_size"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/control_bottom_horizontal_margin"
-                android:layout_toStartOf="@id/btn_call"
-                android:layout_toLeftOf="@id/btn_call"
                 android:scaleType="centerCrop"
-                android:src="@drawable/btn_unmute" />
-        </RelativeLayout>
+                android:src="@drawable/btn_unmute"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_call"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <!--    <io.agora.uikit.logger.LoggerRecyclerView-->
-        <!--        android:id="@+id/log_recycler_view"-->
-        <!--        android:layout_width="@dimen/log_container_width"-->
-        <!--        android:layout_height="@dimen/log_container_height"-->
-        <!--        android:layout_above="@+id/control_panel"-->
-        <!--        android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-        <!--        android:layout_marginRight="@dimen/activity_horizontal_margin"-->
-        <!--        android:layout_marginBottom="@dimen/activity_vertical_margin" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ImageView
+            android:id="@+id/btnStartCamera"
+            android:layout_width="@dimen/other_button_size"
+            android:layout_height="@dimen/other_button_size"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="9dp"
+            android:background="@drawable/bg_letter"
+            android:backgroundTint="@color/blue_text"
+            android:elevation="4dp"
+            android:scaleType="center"
+            android:src="@drawable/btn_camera"
+            app:tint="@color/white" />
     </RelativeLayout>
 </layout>

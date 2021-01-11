@@ -185,16 +185,15 @@ class MessageAdapter(
     inner class VideoRecipientViewHolder(val item: ItemMessageLeftVideoBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
-//            item.andExoPlayerView
-//                .setSource(message.photoUrl)
-            item.videoView.start(message.photoUrl);
-
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
-//            item.videoplayer.setUp(
-//                message.photoUrl,
-//                JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,
-//                message.name
-//            )
+            val proxy: HttpProxyCacheServer = getProxy(item.root.context)
+            val proxyUrl = proxy.getProxyUrl(message.photoUrl)
+            item.videoView.start(proxyUrl)
+            item.videoView.setOnClickListener {
+                if (item.videoView.isPlaying)
+                    item.videoView.pause()
+                else
+                    item.videoView.play()
+            }
         }
     }
 

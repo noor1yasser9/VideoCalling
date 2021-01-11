@@ -39,7 +39,9 @@ class MainUserListRepository private constructor(val context: Context) {
     }
 
 
-    fun updateData(data: Map<String, Any>, id: String, onComplete: () -> Unit) = FirebaseFirestore
+    fun updateData(data: Map<String,
+            Any>, id: String,
+                   onComplete: () -> Unit) = FirebaseFirestore
         .getInstance()
         .collection(COLLECTION_USERS)
         .document(id)

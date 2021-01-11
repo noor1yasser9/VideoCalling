@@ -21,12 +21,15 @@ import com.nurbk.ps.projectm.databinding.FragmentUserListBinding
 import com.nurbk.ps.projectm.model.CallingData
 import com.nurbk.ps.projectm.model.User
 import com.nurbk.ps.projectm.others.*
-import com.nurbk.ps.projectm.service.MessagingServiceFirebase
 import com.nurbk.ps.projectm.ui.activity.MainActivity
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
-import com.nurbk.ps.projectm.ui.viewmodel.IncomingCallViewModel
 import com.nurbk.ps.projectm.ui.viewmodel.MainUserListViewModel
 import com.nurbk.ps.projectm.utils.PreferencesManager
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 
 class UserListFragment : Fragment(), UserListAdapter.UserListener {
@@ -37,7 +40,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
     private val viewModel by lazy {
         ViewModelProvider(
-            requireActivity(),
+            this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[MainUserListViewModel::class.java]
     }
@@ -55,6 +58,8 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         mBinding = FragmentUserListBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
+        loadingDialog = LoadingDialog()
+
         return mBinding.root
     }
 
@@ -62,11 +67,22 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadingDialog = LoadingDialog()
-        viewModel.getProfile {
-            user = PreferencesManager(requireContext()).getUserProfile()
-            mBinding.txtNameUSer.text = user.name
+
+
+            viewModel.getProfile {
+
+                try {
+                    user =  PreferencesManager(requireContext()).getUserProfile()
+                    mBinding.txtNameUSer.text=user.name
+                } catch (e: Exception) {
+
+                }
+
+
         }
+
+
+
         viewModel.getToken {
 
         }
@@ -83,54 +99,34 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
             }
         }
 
-
+        loadingDialog.show(requireActivity().supportFragmentManager, "")
 
         viewModel.getAllUserLiveData.observe(viewLifecycleOwner) {
             userAdapter.apply {
                 userList.clear()
                 userList.addAll(it)
                 notifyDataSetChanged()
+                loadingDialog.dismiss()
             }
         }
 
         mBinding.rcDataList.adapter = userAdapter
 
 
-//        if (requireActivity().intent.getBooleanExtra("d", false)) {
-//            findNavController().navigate(
-//                R.id.action_userListFragment_to_callFragment,
-//                Bundle().apply {
-//                    putParcelable(
-//                        USER_DATA,
-//                        requireActivity().intent.getParcelableExtra<CallingData>("data")
-//                    )
-//                    putString(TYPE_CALL, CALL_AUDIO)
-//                })
-//
-//        }
     }
 
 
     override fun initiateVideoMeeting(user: User) {
-        if (TextUtils.isEmpty(user.token)) {
-            Snackbar.make(
-                requireView(),
-                "${user.name} is not available for meeting",
-                Snackbar.LENGTH_LONG
-            ).show()
-        } else {
-            findNavController()
-                .navigate(R.id.action_userListFragment_to_outgoingInvitationFragment,
-                    Bundle().apply {
-                        putParcelable(USER_DATA, user)
-                        putString(TYPE_CALL, CALL_VIDEO)
-                    })
-
-        }
+        calling(user, CALL_VIDEO)
     }
 
     override fun initiateAudioMeeting(user: User) {
-        if (TextUtils.isEmpty(user.token)) {
+        calling(user, CALL_AUDIO)
+
+    }
+
+    private fun calling(user: User, typeCall: String) {
+        if (TextUtils.isEmpty(user.token.trim())) {
             Snackbar.make(
                 requireView(),
                 "${user.name} is not available for meeting",
@@ -141,13 +137,18 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
                 R.id.action_userListFragment_to_outgoingInvitationFragment,
                 Bundle().apply {
                     putParcelable(USER_DATA, user)
-                    putString(TYPE_CALL, CALL_AUDIO)
+                    putString(TYPE_CALL, typeCall)
                 })
-
         }
-
     }
 
+    override fun onItemClickListener(user: User) {
+        findNavController()
+            .navigate(R.id.action_userListFragment_to_chatFragment,
+                Bundle().apply {
+                    putParcelable(USER_DATA, user)
+                })
+    }
 
     private val invitationBroadcastManager = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -183,4 +184,20 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
             .unregisterReceiver(invitationBroadcastManager)
     }
 
+    override fun onMultipleUserAction(isMultipleUserSelected: Boolean) {
+        if (isMultipleUserSelected) {
+            mBinding.sendGroup.visibility = View.VISIBLE
+            mBinding.sendGroup.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_userListFragment_to_outgoingInvitationFragment,
+                    Bundle().apply {
+                        putParcelable(USER_DATA, user)
+                        putString(TYPE_CALL, CALL_AUDIO)
+                    })
+            }
+
+        } else
+            mBinding.sendGroup.visibility = View.GONE
+
+    }
 }
