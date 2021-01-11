@@ -10,8 +10,8 @@
 
     <color name="colorOrange">#F69F00</color>
     <color name="colorOrange_100">#7A4F00</color>
-    <color name="blue_100">#06323D</color>
-    <color name="blue_text">#06323D</color>
+    <color name="blue_100">#3E4243</color>
+    <color name="blue_text">#FFFFFF</color>
     <color name="blue_200">#3F51B5</color>
 
     <!-- Chat Activity -->
@@ -28,11 +28,9 @@
     <color name="colorPrimary2">#3E3E3E</color>
     <color name="colorAccent">#FFCEA3</color>
     <color name="transparent">#00000000</color>
-    <color name="edittextColor">#EFEFEF</color>
-    <color name="text_title">#23A628</color>
-
-    <color name="grey">#F4F2F2</color>
-
-    <color name="bg_edit_text">#F5F5F5</color>
+    <color name="edittextColor">#DDDDDD</color>
+    <color name="grey">#232323</color>
+    <color name="text_title">#03FF0C</color>
+    <color name="bg_edit_text">#505050</color>
 
 </resources>

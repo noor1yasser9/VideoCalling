@@ -42,7 +42,7 @@
                 <item>
                     <shape
                         android:shape="rectangle"
-                        android:tint="@color/colorControlActivated">
+                        android:tint="@color/white">
                         <corners android:radius="@dimen/progressBarCornerRadius" />
                         <size android:height="@dimen/seekbar_track_progress_height_material" />
                         <solid android:color="@android:color/white" />
