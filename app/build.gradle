@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'io.agora.rtc:full-sdk:2.3.3'
+    implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
 
 
     // navigation
