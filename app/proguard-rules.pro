@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn com.hoanganhtuan95ptit.autoplayvideorecyclerview.**
+

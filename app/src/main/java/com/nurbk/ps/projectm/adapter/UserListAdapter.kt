@@ -1,25 +1,34 @@
 package com.nurbk.ps.projectm.adapter
 
+import android.graphics.drawable.LayerDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.ItemUserListBinding
 import com.nurbk.ps.projectm.model.User
+import com.nurbk.ps.projectm.others.generateColor
+
 
 class UserListAdapter(val userList: ArrayList<User>, val userListener: UserListener) :
     RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
 
     val userSelected = ArrayList<User>()
 
+
     inner class UserListViewHolder(val mBinding: ItemUserListBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(user: User) {
             mBinding.user = user
+
+
+            generateColor(mBinding.txtNameLetter, mBinding.root.context)
+
             mBinding.btnCallAudio.setOnClickListener {
                 userListener.initiateAudioMeeting(user)
             }
@@ -41,20 +50,16 @@ class UserListAdapter(val userList: ArrayList<User>, val userListener: UserListe
                     mBinding.group.visibility = View.VISIBLE
                     if (userSelected.size == 0)
                         userListener.onMultipleUserAction(false)
+                } else if (userSelected.size > 0) {
+                    userSelected.add(user)
+                    mBinding.imageSelected.visibility = View.VISIBLE
+                    mBinding.group.visibility = View.INVISIBLE
+
                 } else {
-                    if (userSelected.size > 0) {
-                        userSelected.add(user)
-                        mBinding.imageSelected.visibility = View.VISIBLE
-                        mBinding.group.visibility = View.INVISIBLE
-
-                    }
-
+                    userListener.onItemClickListener(user)
                 }
             }
 
-            mBinding.root.setOnClickListener {
-                userListener.onItemClickListener(user)
-            }
 
         }
     }

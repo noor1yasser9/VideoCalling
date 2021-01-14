@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_chatFragment_to_callFragment2"
             app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_PDFFragment"
+            app:destination="@id/PDFFragment" />
     </fragment>
 
     <action
@@ -67,4 +70,8 @@
         android:id="@+id/action_users_list_fragment"
         app:destination="@id/userListFragment"
       />
+    <fragment
+        android:id="@+id/PDFFragment"
+        android:name="com.nurbk.ps.projectm.ui.fragment.PDFFragment"
+        android:label="PDFFragment" />
 </navigation>

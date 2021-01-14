@@ -25,5 +25,7 @@
 
     <string name="agora_access_token"></string>
     <string name="chat_nsimple_mobile_chat_notes"><font size="30"><b>Chat</b></font> \n Simple mobile chat notes.</string>
+    <string name="apiKey">AIzaSyAa7HExZR1sEal4XY4dAj1b9-pEx5hffgw</string>
+    <string name="send_location">Send Location</string>
 
 </resources>

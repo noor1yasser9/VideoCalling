@@ -211,9 +211,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:background="#751E1E1E"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/msgData"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/btnVideo"
@@ -221,7 +223,7 @@
                     android:layout_height="30dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/ic_baseline_video_library_24"
-                    app:tint="@android:color/darker_gray" />
+                    app:tint="@android:color/white" />
 
                 <ImageView
                     android:id="@+id/btnImage"
@@ -229,7 +231,23 @@
                     android:layout_height="30dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/ic_image_bg"
-                    app:tint="@android:color/darker_gray" />
+                    app:tint="@android:color/white" />
+
+                <ImageView
+                    android:id="@+id/btnLocation"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/ic_location"
+                    app:tint="@android:color/white" />
+
+                <ImageView
+                    android:id="@+id/btnFile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/ic_file"
+                    app:tint="@android:color/white" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

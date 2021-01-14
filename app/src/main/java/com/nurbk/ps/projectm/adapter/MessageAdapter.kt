@@ -1,6 +1,7 @@
 package com.nurbk.ps.projectm.adapter
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.danikula.videocache.HttpProxyCacheServer
 import com.facebook.share.internal.ShareConstants.VIDEO_URL
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.nurbk.ps.projectm.App.Companion.getProxy
 import com.nurbk.ps.projectm.R
@@ -19,6 +27,8 @@ import com.nurbk.ps.projectm.databinding.*
 import com.nurbk.ps.projectm.model.Message
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.utils.Utility.setAudioTimeMmSs
+import com.nurbk.ps.projectm.utils.bindingFakeAudioProgress
+import com.nurbk.ps.projectm.utils.bindingFakeFile
 
 
 class MessageAdapter(
@@ -93,6 +103,7 @@ class MessageAdapter(
         fun onStartTrackingTouch(seekBar: SeekBar, item: Message)
         fun onStopTrackingTouch(seekBar: SeekBar, item: Message)
         fun showPic(view: View, message: Message)
+        fun showPdf(message: Message)
     }
 
     inner class ImageSenderViewHolder(val item: ItemMessageRightImageBinding) :
@@ -121,6 +132,34 @@ class MessageAdapter(
         }
     }
 
+    inner class MapSenderViewHolder(val item: ItemMessageRightLocationBinding) :
+        RecyclerView.ViewHolder(item.root) {
+        fun onBind(message: Message) {
+            val location = message.text.split(",")
+            mapView(
+                item.mapView, item.root.context,
+                location[0].toDouble(),
+                location[1].toDouble(),
+                ""
+            )
+
+
+            item.mapView.onResume()
+        }
+    }
+
+    inner class FileSenderViewHolder(val item: ItemMessageRightFileBinding) :
+        RecyclerView.ViewHolder(item.root) {
+        fun onBind(message: Message) {
+            item.message = message
+            if (message.audioDownloaded.not()) bindingFakeFile(item.progressBar, message)
+            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.root.setOnClickListener {
+                msgAdapterListener.showPdf(message)
+            }
+        }
+    }
+
     class TextRecipientViewHolder(val item: ItemMessageLeftChatBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
@@ -138,8 +177,6 @@ class MessageAdapter(
                 msgAdapterListener.onAudioClick(item.playButton, message)
             }
             item.nameTextView.text = message.name
-//            item.setVariable(2, item)
-//            item.setVariable(2, msgAdapterListener)
             item.executePendingBindings()
             setAudioTimeMmSs(item.timeSeekBarTextView, message.audioDuration)
             item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
@@ -197,6 +234,32 @@ class MessageAdapter(
         }
     }
 
+    inner class MapRecipientViewHolder(val item: ItemMessageLeftLocationBinding) :
+        RecyclerView.ViewHolder(item.root) {
+        fun onBind(message: Message) {
+            val location = message.text.split(",")
+            mapView(
+                item.mapView, item.root.context,
+                location[0].toDouble(),
+                location[1].toDouble(),
+                ""
+            )
+
+
+            item.mapView.onResume()
+        }
+    }
+
+    inner class FileRecipientViewHolder(val item: ItemMessageLeftFileBinding) :
+        RecyclerView.ViewHolder(item.root) {
+        fun onBind(message: Message) {
+            item.message = message
+            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.root.setOnClickListener {
+                msgAdapterListener.showPdf(message)
+            }
+        }
+    }
 
     var dataList = ArrayList<Message>()
 
@@ -236,6 +299,22 @@ class MessageAdapter(
                 )
             }
 
+            MAP_SENDER -> {
+                return MapSenderViewHolder(
+                    DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.context),
+                        R.layout.item_message_right_location, parent, false
+                    )
+                )
+            }
+            FILE_SENDER -> {
+                return FileSenderViewHolder(
+                    DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.context),
+                        R.layout.item_message_right_file, parent, false
+                    )
+                )
+            }
             TEXT_RECIPIENT -> {
                 return TextRecipientViewHolder(
                     DataBindingUtil.inflate(
@@ -265,6 +344,22 @@ class MessageAdapter(
                     DataBindingUtil.inflate(
                         LayoutInflater.from(parent.context),
                         R.layout.item_message_left_video, parent, false
+                    )
+                )
+            }
+            MAP_RECIPIENT -> {
+                return MapRecipientViewHolder(
+                    DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.context),
+                        R.layout.item_message_left_location, parent, false
+                    )
+                )
+            }
+            FILE_RECIPIENT -> {
+                return FileRecipientViewHolder(
+                    DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.context),
+                        R.layout.item_message_left_file, parent, false
                     )
                 )
             }
@@ -301,6 +396,12 @@ class MessageAdapter(
             VIDEO_SENDER -> {
                 (holder as VideoSenderViewHolder).onBind(contact)
             }
+            MAP_SENDER -> {
+                (holder as MapSenderViewHolder).onBind(contact)
+            }
+            FILE_SENDER -> {
+                (holder as FileSenderViewHolder).onBind(contact)
+            }
             TEXT_RECIPIENT -> {
                 (holder as TextRecipientViewHolder).onBind(contact)
 
@@ -316,7 +417,12 @@ class MessageAdapter(
             VIDEO_RECIPIENT -> {
                 (holder as VideoRecipientViewHolder).onBind(contact)
             }
-
+            MAP_RECIPIENT -> {
+                (holder as MapRecipientViewHolder).onBind(contact)
+            }
+            FILE_RECIPIENT -> {
+                (holder as FileRecipientViewHolder).onBind(contact)
+            }
         }
     }
 
@@ -352,9 +458,54 @@ class MessageAdapter(
                     VIDEO_RECIPIENT
                 }
             }
+            TYPE_MESSAGE_MAP -> {
+                return if (model.senderId == auth.currentUser?.uid) {
+                    MAP_SENDER
+                } else {
+                    MAP_RECIPIENT
+                }
+            }
+            TYPE_MESSAGE_FILE -> {
+                return if (model.senderId == auth.currentUser?.uid) {
+                    FILE_SENDER
+                } else {
+                    FILE_RECIPIENT
+                }
+            }
         }
         return super.getItemViewType(position)
     }
 
+    private var mMap: GoogleMap? = null
+
+    private fun mapView(
+        mapView: MapView, context: Context,
+        lat: Double,
+        lan: Double,
+        name: String
+    ) {
+        mapView.apply {
+            onCreate(null)
+            getMapAsync { googleMap ->
+                mMap = googleMap
+
+                MapsInitializer.initialize(context)
+                googleMap.uiSettings.isMapToolbarEnabled = false
+                try {
+
+                    stateTheme(context, googleMap)
+                } catch (e: Resources.NotFoundException) {
+                    e.printStackTrace()
+                }
+                val latLng = LatLng(lat, lan)
+                mMap!!.addMarker(MarkerOptions().position(latLng).title(name))
+                mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+                mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                mMap!!.uiSettings.setAllGesturesEnabled(true)
+                mMap!!.uiSettings.isZoomGesturesEnabled = true
+                mMap!!.isTrafficEnabled = true
+            }
+        }
+    }
 
 }

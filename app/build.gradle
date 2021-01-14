@@ -59,6 +59,9 @@ dependencies {
     implementation 'io.agora.rtc:full-sdk:2.3.3'
     implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
 
+    //map
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
@@ -110,5 +113,7 @@ dependencies {
     implementation 'com.klinkerapps:simple_videoview:1.2.4'
     implementation 'com.danikula:videocache:2.7.1'
 
+    //dpf
+    implementation 'es.voghdev.pdfviewpager:library:1.0.6'
 
 }

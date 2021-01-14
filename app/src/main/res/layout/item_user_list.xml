@@ -24,7 +24,7 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/txtNameLetter"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/bg_letter"
@@ -58,9 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintBottom_toBottomOf="@+id/txtNameLetter"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="@+id/txtNameLetter"
                 app:srcCompat="@drawable/ic_baseline_videocam_24" />
 
             <ImageView
@@ -84,8 +84,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/btnCallAudio"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="@+id/textView2"
+                app:layout_constraintStart_toEndOf="@+id/txtNameLetter"
+                app:layout_constraintTop_toTopOf="@+id/txtNameLetter"
                 tools:text="Noor Yasser" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:id="@+id/group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="btnCallAudio,btnCallvideo,textView2" />
+                app:constraint_referenced_ids="btnCallAudio,btnCallvideo,txtNameLetter" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

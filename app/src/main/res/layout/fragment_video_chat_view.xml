@@ -52,6 +52,26 @@
         </FrameLayout>
 
 
+        <FrameLayout
+            android:id="@+id/cameraOf"
+            android:layout_width="@dimen/local_preview_width"
+            android:layout_height="@dimen/local_preview_height"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/local_preview_margin_top"
+            android:layout_marginEnd="@dimen/local_preview_margin_right"
+            android:layout_marginRight="@dimen/local_preview_margin_right"
+            android:background="@color/localBackground">
+
+            <ImageView
+                android:layout_width="@dimen/local_back_icon_size"
+                android:layout_height="@dimen/local_back_icon_size"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_agora_large" />
+        </FrameLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/control_panel"
             android:layout_width="match_parent"
