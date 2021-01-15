@@ -33,4 +33,6 @@ data class Message(
     fun setMessageId() {
         id = senderId + "_" + timestamp
     }
+
+    fun getTime()= android.text.format.DateFormat.format("hh:mm a",timestamp)
 }

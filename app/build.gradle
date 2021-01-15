@@ -110,10 +110,9 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     //video
-    implementation 'com.klinkerapps:simple_videoview:1.2.4'
     implementation 'com.danikula:videocache:2.7.1'
+    implementation 'fm.jiecao:jiecaovideoplayer:5.7'
 
-    //dpf
-    implementation 'es.voghdev.pdfviewpager:library:1.0.6'
+    implementation "com.github.pgreze:android-reactions:1.3"
 
 }

@@ -17,26 +17,19 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-
-        <com.klinker.android.simple_videoview.SimpleVideoView
-            android:id="@+id/video_view"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/bg_video"
-            app:loop="false"
-            app:muted="false"
-            app:showSpinner="false"
-            app:stopSystemAudio="false"
-            />
-
-
+        <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+            android:id="@+id/videoplayer"
+            android:layout_width="250dp"
+            android:layout_height="200dp"/>
         <TextView
             android:id="@+id/txtTime"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
+            android:gravity="end"
+            android:padding="@dimen/_4sdp"
+            android:background="@color/blue_100"
             android:layout_weight="1"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             tools:text="00.20" />
     </LinearLayout>
 </layout>

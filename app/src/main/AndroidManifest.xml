@@ -24,7 +24,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectM"
-        android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
@@ -33,7 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.fragment.PDFFragment" />
 
         <service
             android:name=".service.MessagingServiceFirebase"

@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.danikula.videocache.HttpProxyCacheServer
 import com.facebook.share.internal.ShareConstants.VIDEO_URL
+import com.github.pgreze.reactions.ReactionPopup
+import com.github.pgreze.reactions.dsl.reactionConfig
+import com.github.pgreze.reactions.dsl.reactions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -27,8 +30,7 @@ import com.nurbk.ps.projectm.databinding.*
 import com.nurbk.ps.projectm.model.Message
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.utils.Utility.setAudioTimeMmSs
-import com.nurbk.ps.projectm.utils.bindingFakeAudioProgress
-import com.nurbk.ps.projectm.utils.bindingFakeFile
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
 
 
 class MessageAdapter(
@@ -47,9 +49,10 @@ class MessageAdapter(
     inner class TextSenderViewHolder(val item: ItemMessageRightChatBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
+            getReaction(item.root, item.root.context)
             item.txtMessage.text = message.text
             item.txtTime.text =
-                android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+                message.getTime()
         }
     }
 
@@ -67,14 +70,14 @@ class MessageAdapter(
             item.executePendingBindings()
             item.nameTextView.text = message.name
             setAudioTimeMmSs(item.timeSeekBarTextView, message.audioDuration)
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtTime.text = message.getTime()
             item.seekBar.setOnSeekBarChangeListener(
                 getSeekBarChangeListener(
                     msgAdapterListener,
                     message
                 )
             )
-
+            getReaction(item.root, item.root.context)
 
         }
 
@@ -110,25 +113,24 @@ class MessageAdapter(
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
             item.txtSenderTimeMessage.text =
-                android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+                message.getTime()
             getImage(itemView.context, message.photoUrl, item.imageSenderMessage)
+            getReaction(item.root, item.root.context)
         }
     }
 
     inner class VideoSenderViewHolder(val item: ItemMessageRightVideoBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtTime.text = message.getTime()
             val proxy: HttpProxyCacheServer = getProxy(item.root.context)
             val proxyUrl = proxy.getProxyUrl(message.photoUrl)
-            item.videoView.start(proxyUrl)
-            item.videoView.setOnClickListener {
-                if (item.videoView.isPlaying)
-                    item.videoView.pause()
-                else
-                    item.videoView.play()
-            }
-
+            item.videoplayer.setUp(
+                proxyUrl,
+                JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,
+                message.name
+            )
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -142,9 +144,8 @@ class MessageAdapter(
                 location[1].toDouble(),
                 ""
             )
-
-
             item.mapView.onResume()
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -152,20 +153,21 @@ class MessageAdapter(
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
             item.message = message
-            if (message.audioDownloaded.not()) bindingFakeFile(item.progressBar, message)
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtTime.text = message.getTime()
             item.root.setOnClickListener {
                 msgAdapterListener.showPdf(message)
             }
+            getReaction(item.root, item.root.context)
         }
     }
 
-    class TextRecipientViewHolder(val item: ItemMessageLeftChatBinding) :
+    inner class TextRecipientViewHolder(val item: ItemMessageLeftChatBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
             item.txtMessageEnd.text = message.text
             item.txtTimeEnd.text =
-                android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+                message.getTime()
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -179,7 +181,7 @@ class MessageAdapter(
             item.nameTextView.text = message.name
             item.executePendingBindings()
             setAudioTimeMmSs(item.timeSeekBarTextView, message.audioDuration)
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtTime.text = message.getTime()
 
             item.seekBar.setOnSeekBarChangeListener(
                 getSeekBarChangeListener(
@@ -187,7 +189,7 @@ class MessageAdapter(
                     message
                 )
             )
-
+            getReaction(item.root, item.root.context)
         }
 
 
@@ -213,9 +215,9 @@ class MessageAdapter(
     inner class ImageRecipientViewHolder(val item: ItemMessageLeftImageBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
-            item.txtRecipientTimeMessage.text =
-                android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtRecipientTimeMessage.text = message.getTime()
             getImage(itemView.context, message.photoUrl, item.imageRecipientMessage)
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -224,13 +226,13 @@ class MessageAdapter(
         fun onBind(message: Message) {
             val proxy: HttpProxyCacheServer = getProxy(item.root.context)
             val proxyUrl = proxy.getProxyUrl(message.photoUrl)
-            item.videoView.start(proxyUrl)
-            item.videoView.setOnClickListener {
-                if (item.videoView.isPlaying)
-                    item.videoView.pause()
-                else
-                    item.videoView.play()
-            }
+
+            item.videoplayer.setUp(
+                proxyUrl,
+                JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,
+                message.name
+            )
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -245,7 +247,7 @@ class MessageAdapter(
                 ""
             )
 
-
+            getReaction(item.root, item.root.context)
             item.mapView.onResume()
         }
     }
@@ -254,10 +256,11 @@ class MessageAdapter(
         RecyclerView.ViewHolder(item.root) {
         fun onBind(message: Message) {
             item.message = message
-            item.txtTime.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            item.txtTime.text = message.getTime()
             item.root.setOnClickListener {
                 msgAdapterListener.showPdf(message)
             }
+            getReaction(item.root, item.root.context)
         }
     }
 
@@ -506,6 +509,26 @@ class MessageAdapter(
                 mMap!!.isTrafficEnabled = true
             }
         }
+    }
+
+
+    fun getReaction(view: View, context: Context) {
+        val config = reactionConfig(context) {
+            reactions {
+                resId { R.drawable.ic_like }
+                resId { R.drawable.ic_heart }
+                resId { R.drawable.ic_lol }
+                reaction { R.drawable.ic_like scale ImageView.ScaleType.FIT_XY }
+                reaction { R.drawable.ic_heart scale ImageView.ScaleType.FIT_XY }
+                reaction { R.drawable.ic_lol scale ImageView.ScaleType.FIT_XY }
+            }
+        }
+        val popup = ReactionPopup(context, config) { position ->
+            true.also {
+                // position = -1 if no selection
+            }
+        }
+        view.setOnTouchListener(popup)
     }
 
 }
