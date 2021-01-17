@@ -528,7 +528,7 @@ class MessageAdapter(
                 // position = -1 if no selection
             }
         }
-        view.setOnTouchListener(popup)
+//        view.setOnTouchListener(popup)
     }
 
 }
