@@ -1,5 +1,6 @@
 package com.nurbk.ps.projectm.adapter
 
+import android.graphics.Color
 import android.graphics.drawable.LayerDrawable
 import android.view.LayoutInflater
 import android.view.View
