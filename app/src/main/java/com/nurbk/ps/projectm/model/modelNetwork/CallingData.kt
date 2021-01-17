@@ -1,4 +1,4 @@
-package com.nurbk.ps.projectm.model
+package com.nurbk.ps.projectm.model.modelNetwork
 
 import android.os.Parcelable
 import com.nurbk.ps.projectm.others.TYPE_SINGLE
