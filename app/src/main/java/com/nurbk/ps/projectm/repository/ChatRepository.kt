@@ -203,14 +203,14 @@ class ChatRepository private constructor(val context: Context) {
 
 
     fun uploadVideo(
-        uri: Uri,
+        uri: Uri,type: String,
         onSuccess: (videoPath: String) -> Unit, onFailure: (expception: Exception) -> Unit
     ) {
 
         val firebaseStorage = FirebaseStorage.getInstance()
         val videoReference = firebaseStorage.reference.child("video")
         val uploadTask: UploadTask = videoReference
-            .child(uri.lastPathSegment + ".mp4")
+            .child(uri.lastPathSegment + ".$type")
             .putFile(uri)
 
         // Listen for state changes, errors, and completion of the upload.
