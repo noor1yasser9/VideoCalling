@@ -58,8 +58,7 @@ class SignUpRepository private constructor(context: Context) {
                         user.image,
                     )
                 )
-            } else
-                Log.e("ttttttt", it.exception!!.message.toString())
+            }
         }
     }
 
