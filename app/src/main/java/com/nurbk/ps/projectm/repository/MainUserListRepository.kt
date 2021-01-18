@@ -38,10 +38,11 @@ class MainUserListRepository private constructor(val context: Context) {
             MainUserListRepository(context)
     }
 
-
-    fun updateData(data: Map<String,
-            Any>, id: String,
-                   onComplete: () -> Unit) = FirebaseFirestore
+    fun updateData(
+        data: Map<String,
+                Any>, id: String,
+        onComplete: () -> Unit
+    ) = FirebaseFirestore
         .getInstance()
         .collection(COLLECTION_USERS)
         .document(id)
@@ -56,9 +57,7 @@ class MainUserListRepository private constructor(val context: Context) {
             }
         }
 
-
     fun getUpdateLiveData(): LiveData<Boolean> = updateLiveData
-
 
     fun getTokenId(onComplete: () -> Unit) {
         val user =
@@ -94,8 +93,8 @@ class MainUserListRepository private constructor(val context: Context) {
                 array.clear()
                 querySnapshot?.documents!!.forEach {
                     val item = it.toObject(User::class.java)
-
-                    if (item!!.id != FirebaseAuth.getInstance().currentUser!!.uid)
+                    item!!.isOnline = it["isOnline"] as Boolean
+                    if (item.id != FirebaseAuth.getInstance().currentUser!!.uid)
                         array.add(item)
                 }
                 _getAllUserLiveData.value = array
