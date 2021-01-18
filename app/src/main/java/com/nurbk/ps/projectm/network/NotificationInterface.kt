@@ -1,6 +1,6 @@
 package com.nurbk.ps.projectm.network
 
-import com.nurbk.ps.projectm.model.PushCalling
+import com.nurbk.ps.projectm.model.modelNetwork.PushCalling
 import com.nurbk.ps.projectm.others.AUTH_VALUE
 import com.nurbk.ps.projectm.others.VALUE_TYPE
 import okhttp3.ResponseBody
