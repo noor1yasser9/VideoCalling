@@ -6,6 +6,7 @@ const val NAME_FILE_PREF = "PreferencesManagerProject"
 const val IS_SIGN_IN = "signIn"
 const val COLLECTION_USERS = "User"
 const val COLLECTION_CHAT_CHANNEL = "ChatChannel"
+const val COLLECTION_GROUP_CHANNEL = "GroupChannel"
 const val USER_DATA_PROFILE = "userProfile"
 
 const val USER_DATA = "userData"
@@ -37,6 +38,9 @@ const val FINISH_CALL = "finish_call"
 
 
 const val COLLECTION_CHAT_MESSAGE = "Messages"
+
+const val USER_PROFILE = 1
+const val USER_GROUP = 2
 
 const val REQUEST_IMAGE_CODE = 1
 const val REQUEST_VIDEO_CODE = 2
