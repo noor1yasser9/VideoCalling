@@ -10,6 +10,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.nurbk.ps.projectm.model.User
+import com.nurbk.ps.projectm.others.COLLECTION_GROUP_CHANNEL
 import com.nurbk.ps.projectm.others.COLLECTION_USERS
 import com.nurbk.ps.projectm.others.USER_DATA_PROFILE
 import com.nurbk.ps.projectm.utils.PreferencesManager
@@ -21,6 +22,9 @@ class MainUserListRepository private constructor(val context: Context) {
 
     private val _getAllUserLiveData = MutableLiveData<List<User>>()
     val getAllUserLiveData: LiveData<List<User>> = _getAllUserLiveData
+
+    private val _getAllGroupLiveData = MutableLiveData<List<User>>()
+    val getAllGroupLiveData: LiveData<List<User>> = _getAllGroupLiveData
 
 
     companion object {
@@ -97,9 +101,36 @@ class MainUserListRepository private constructor(val context: Context) {
                     if (item.id != FirebaseAuth.getInstance().currentUser!!.uid)
                         array.add(item)
                 }
-                _getAllUserLiveData.value = array
+                _getAllUserLiveData.postValue(array)
             }
-
-
     }
+
+    fun addGroup(
+        currentUser: String,
+        groupChannel: User
+    ) =
+        FirebaseFirestore
+            .getInstance()
+            .collection(COLLECTION_USERS)
+            .document(currentUser)
+            .collection(COLLECTION_GROUP_CHANNEL)
+            .document(groupChannel.id)
+            .set(groupChannel)
+
+    fun getAllGroup() {
+        val array = ArrayList<User>()
+        FirebaseFirestore
+            .getInstance()
+            .collection(COLLECTION_USERS)
+            .document(FirebaseAuth.getInstance().uid.toString())
+            .collection(COLLECTION_GROUP_CHANNEL)
+            .addSnapshotListener { querySnapshot, _ ->
+                array.clear()
+                querySnapshot?.documents!!.forEach {
+                    array.add(it.toObject(User::class.java)!!)
+                }
+                _getAllGroupLiveData.postValue(array)
+            }
+    }
+
 }
