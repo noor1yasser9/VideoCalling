@@ -14,15 +14,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentOutgoingInvitationBinding
-import com.nurbk.ps.projectm.model.CallingData
-import com.nurbk.ps.projectm.model.PushCalling
+import com.nurbk.ps.projectm.model.modelNetwork.CallingData
+import com.nurbk.ps.projectm.model.modelNetwork.PushCalling
 import com.nurbk.ps.projectm.model.User
 import com.nurbk.ps.projectm.network.ApiClient
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.utils.PreferencesManager
 import okhttp3.ResponseBody
-//import org.jitsi.meet.sdk.JitsiMeetActivity
-//import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,12 +56,24 @@ class OutgoingInvitationFragment : Fragment() {
         return mBinding.root
     }
 
-
+    private lateinit var usersList: ArrayList<User>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         argumentData = requireArguments()
-        user = argumentData.getParcelable(USER_DATA)!!
-        mBinding.user = user
+        if (argumentData.getString(TYPE) == TYPE_SINGLE) {
+            user = argumentData.getParcelable(USER_DATA)!!
+            sendRemoteMessage(REMOTE_MSG_INVITATION, user)
+            mBinding.user = user
+        } else {
+            usersList = argumentData.getParcelableArrayList(USER_DATA_LIST)!!
+
+            usersList.forEach {
+                sendRemoteMessage(REMOTE_MSG_INVITATION, it)
+                mBinding.user = it
+            }
+
+        }
+
 
         if (argumentData.getString(TYPE_CALL) == CALL_AUDIO) {
             isAudio = true
@@ -69,21 +81,27 @@ class OutgoingInvitationFragment : Fragment() {
             typeMeeting = CALL_AUDIO
         }
         mBinding.btnCancelCall.setOnClickListener {
-            sendRemoteMessage(REMOTE_MSG_INVITATION_CANCEL)
+            if (argumentData.getString(TYPE) == TYPE_SINGLE)
+                sendRemoteMessage(REMOTE_MSG_INVITATION_CANCEL, user)
+            else
+                usersList.forEach {
+                    sendRemoteMessage(REMOTE_MSG_INVITATION, it)
+                }
             findNavController().navigateUp()
         }
-        sendRemoteMessage(REMOTE_MSG_INVITATION)
+
 
     }
 
-    private fun sendRemoteMessage(type: String) {
+    private fun sendRemoteMessage(type: String, user: User) {
         meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
         dataCalling = CallingData(
             name = userProfile.name, meetingType = typeMeeting,
             type = type, email = userProfile.email,
             senderToken = userProfile.token,
             receiverToken = user.token,
-            meetingRoom = meetingRoom
+            meetingRoom = meetingRoom,
+            typeMeeting = argumentData.getString(TYPE)!!
         )
         PushCalling(
             dataCalling,
@@ -97,15 +115,14 @@ class OutgoingInvitationFragment : Fragment() {
                         call: Call<ResponseBody>,
                         response: Response<ResponseBody>
                     ) {
-                        if (response.isSuccessful) {
-                            Log.e("ttttttttttRes", response.body().toString())
-                        } else {
-                            Log.e("ttttttttttttt", response.errorBody().toString())
-                        }
+                        if (response.isSuccessful)
+                            Log.e("ttttttttSuccessful", response.body()!!.string())
+                        else
+                            Log.e("ttttt",response.errorBody()!!.string())
                     }
 
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
+                        TODO("Not yet implemented")
                     }
                 })
         }
@@ -118,10 +135,22 @@ class OutgoingInvitationFragment : Fragment() {
             when (type!!.type) {
                 REMOTE_MSG_INVITATION_ACCEPTED -> {
 
-                    val bundle = Bundle()
-                    bundle.putParcelable(DATA_CALLING, dataCalling)
-                    findNavController().navigate(R.id.action_to_call, bundle)
-
+                    if (argumentData.getString(TYPE) == TYPE_SINGLE) {
+                        val bundle = Bundle()
+                        bundle.putParcelable(DATA_CALLING, dataCalling)
+                        findNavController().navigate(R.id.action_to_call, bundle)
+                    } else {
+                        val options = JitsiMeetConferenceOptions.Builder()
+                            .setServerURL(URL("https://meet.jit.si"))
+                            .setRoom(dataCalling.meetingRoom)
+                            .setAudioMuted(false)
+                            .setVideoMuted(false)
+                            .setAudioOnly(false)
+                            .setWelcomePageEnabled(false)
+                            .build()
+                        JitsiMeetActivity.launch(requireContext(), options)
+                        findNavController().navigateUp()
+                    }
 
                 }
                 REMOTE_MSG_INVITATION_REJECTED -> {

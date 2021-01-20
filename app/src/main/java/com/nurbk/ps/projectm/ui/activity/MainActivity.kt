@@ -15,6 +15,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.ActivityMainBinding
 import com.nurbk.ps.projectm.others.IS_SIGN_IN
+import com.nurbk.ps.projectm.utils.NotificationUtils
 import com.nurbk.ps.projectm.utils.PreferencesManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        NotificationUtils.createMainNotificationChannel(this)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
 
@@ -36,11 +39,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(
             mBinding.toolbar, navController, appBarConfiguration
         )
-        setSupportActionBar(mBinding.toolbar)
 
-        navHostFragment.navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, arguments: Bundle? ->
-            mBinding.toolbar.isVisible = false
-        }
+
 
     }
 
