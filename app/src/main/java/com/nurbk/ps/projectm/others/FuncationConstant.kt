@@ -65,7 +65,6 @@ fun permission(
         .check()
 }
 
-
 fun String.saveTo(path: String) {
     val file = File(path)
     if (file.exists()) return
