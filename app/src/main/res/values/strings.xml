@@ -14,6 +14,20 @@
     <string name="incoming_meeting_invitation">Incoming Meeting invitation</string>
     <string name="send_meeting_invitation">Send Meeting Invitation</string>
 
+    <string name="facebook_app_id">2757523621229762</string>
+    <string name="fb_login_protocol_scheme">fb2757523621229762</string>
+    <string name="login_with_facebock">Login With Facebock</string>
+    <string name="record_failed">You can\'t record a voice message while you\'re recording in another app</string>
+
+
+    <string name="agora_app_id">ca500dfe76d440dc9cde66b97cee9f80</string>
+
+    <string name="agora_access_token"></string>
+    <string name="chat_nsimple_mobile_chat_notes"><font size="30"><b>Chat</b></font> \n Simple mobile chat notes.</string>
+    <string name="apiKey">AIzaSyAa7HExZR1sEal4XY4dAj1b9-pEx5hffgw</string>
+    <string name="send_location">Send Location</string>
+    <string name="main_channel">chat channel notification</string>
+    <string name="main_channel_description">description chat channel notification</string>
 
 
 </resources>
