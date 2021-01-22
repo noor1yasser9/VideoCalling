@@ -43,9 +43,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     ) = chatRepository.uploadImage(selectedImageBytes, onSuccess)
 
     fun uploadVideo(
-        uri: Uri,
+        uri: Uri, type: String,
         onSuccess: (videoPath: String) -> Unit, onFailure: (expception: Exception) -> Unit
-    ) = chatRepository.uploadVideo(uri, onSuccess, onFailure)
+    ) = chatRepository.uploadVideo(uri, type, onSuccess, onFailure)
 
 
     fun updateData(
