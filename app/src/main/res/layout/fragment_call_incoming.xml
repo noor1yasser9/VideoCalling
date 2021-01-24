@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.nurbk.ps.projectm.model.CallingData" />
+            type="com.nurbk.ps.projectm.model.modelNetwork.CallingData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
