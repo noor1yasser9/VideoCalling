@@ -5,10 +5,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import kotlinx.android.parcel.Parcelize
 
-/**
- * Set messageId for recycler view adapter
- * Firebase timestamp is created after init method.
- */
+
 
 @Parcelize
 data class Message(
