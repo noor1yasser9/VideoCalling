@@ -112,6 +112,7 @@ dependencies {
     //video
     implementation 'com.danikula:videocache:2.7.1'
     implementation 'fm.jiecao:jiecaovideoplayer:5.7'
+    implementation 'com.github.AbedElazizShe:LightCompressor:0.7.7'
 
     implementation "com.github.pgreze:android-reactions:1.3"
 
