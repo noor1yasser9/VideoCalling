@@ -8,6 +8,7 @@
         <variable
             name="user"
             type="com.nurbk.ps.projectm.model.User" />
+        <import type="android.graphics.Color"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -36,9 +37,20 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16ssp"
                 android:textStyle="bold"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="N" />
+
+            <TextView
+                android:id="@+id/txtOnline"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/bg_letter"
+                android:backgroundTint="@{user.isOnline? @android:color/holo_green_dark : @android:color/darker_gray}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageSelected"
@@ -57,9 +69,9 @@
                 android:id="@+id/btnCallvideo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtNameLetter"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtOnline"
                 app:layout_constraintTop_toTopOf="@+id/txtNameLetter"
                 app:srcCompat="@drawable/ic_baseline_videocam_24" />
 

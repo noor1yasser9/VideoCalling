@@ -83,11 +83,35 @@
             android:background="@drawable/bg_letter"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:padding="@dimen/_16sdp"
-            android:src="@drawable/ic_group"
+            android:src="@drawable/ic_baseline_call_24"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/createGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_letter"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:padding="@dimen/_16sdp"
+            android:src="@drawable/ic_group"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/sendGroup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="sendGroup,createGroup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
