@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +14,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.adapter.UserListAdapter
 import com.nurbk.ps.projectm.databinding.FragmentUserListBinding
-import com.nurbk.ps.projectm.model.CallingData
+import com.nurbk.ps.projectm.model.Message
+import com.nurbk.ps.projectm.model.modelNetwork.CallingData
 import com.nurbk.ps.projectm.model.User
 import com.nurbk.ps.projectm.others.*
 import com.nurbk.ps.projectm.ui.activity.MainActivity
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.MainUserListViewModel
 import com.nurbk.ps.projectm.utils.PreferencesManager
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.util.*
 
 
 class UserListFragment : Fragment(), UserListAdapter.UserListener {
@@ -68,30 +66,36 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         super.onViewCreated(view, savedInstanceState)
 
 
+        viewModel.updateUser(
+            mapOf("isOnline" to true), FirebaseAuth.getInstance().uid!!,
+            COLLECTION_USERS
+        ) {
 
-            viewModel.getProfile {
+        }
+        viewModel.getProfile {
 
-                try {
-                    user =  PreferencesManager(requireContext()).getUserProfile()
-                    mBinding.txtNameUSer.text=user.name
-                } catch (e: Exception) {
+            try {
+                user = PreferencesManager(requireContext()).getUserProfile()
+                mBinding.txtNameUSer.text = user.name
+            } catch (e: Exception) {
 
-                }
+            }
 
 
         }
-
-
 
         viewModel.getToken {
 
         }
 
-
-
-
         mBinding.btnLogOut.setOnClickListener {
             loadingDialog.show(requireActivity().supportFragmentManager, "")
+            viewModel.updateUser(
+                mapOf("isOnline" to false), FirebaseAuth.getInstance().uid!!,
+                COLLECTION_USERS
+            ) {
+
+            }
             viewModel.getLogOut().also {
                 PreferencesManager(requireContext()).getEditor()!!.clear().clear().apply()
                 requireActivity().finish()
@@ -102,17 +106,47 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         loadingDialog.show(requireActivity().supportFragmentManager, "")
 
         viewModel.getAllUserLiveData.observe(viewLifecycleOwner) {
-            userAdapter.apply {
-                userList.clear()
-                userList.addAll(it)
-                notifyDataSetChanged()
-                loadingDialog.dismiss()
+            viewModel.getAllGroupLiveData.observe(viewLifecycleOwner) { groups ->
+                userAdapter.apply {
+                    userList.clear()
+                    userList.addAll(it)
+                    userList.addAll(groups)
+                    notifyDataSetChanged()
+                    loadingDialog.dismiss()
+                }
             }
+
+            mBinding.rcDataList.adapter = userAdapter
+            dataNotification(it)
         }
 
-        mBinding.rcDataList.adapter = userAdapter
+        mBinding.sendGroup.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_userListFragment_to_outgoingInvitationFragment,
+                Bundle().apply {
+                    putParcelableArrayList(USER_DATA_LIST, userAdapter.userSelected)
+                    putString(TYPE_CALL, CALL_AUDIO)
+                    putString(TYPE, TYPE_GROUP)
+                })
+            userAdapter.userSelected.clear()
+        }
 
-
+        mBinding.createGroup.setOnClickListener {
+            userAdapter.userSelected.add(user)
+            userAdapter.userSelected.forEach {
+                viewModel.addGroup(
+                    it.id,
+                    User(
+                        id = UUID.randomUUID().toString(),
+                        name = "ASdfas",
+                        usersGroup = userAdapter.userSelected,
+                        typeUser = USER_GROUP,
+                    )
+                )
+            }
+            userAdapter.userSelected.clear()
+            mBinding.rcDataList.adapter = userAdapter
+        }
     }
 
 
@@ -124,6 +158,15 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         calling(user, CALL_AUDIO)
 
     }
+
+    override fun onMultipleUserAction(isMultipleUserSelected: Boolean) {
+        if (isMultipleUserSelected)
+            mBinding.group.visibility = View.VISIBLE
+        else
+            mBinding.group.visibility = View.GONE
+
+    }
+
 
     private fun calling(user: User, typeCall: String) {
         if (TextUtils.isEmpty(user.token.trim())) {
@@ -138,6 +181,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
                 Bundle().apply {
                     putParcelable(USER_DATA, user)
                     putString(TYPE_CALL, typeCall)
+                    putString(TYPE, TYPE_SINGLE)
                 })
         }
     }
@@ -178,26 +222,38 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
             )
     }
 
+    private fun dataNotification(it: List<User>) {
+        if (requireActivity().intent.getParcelableExtra<Message>(USER_DATA_LIST) != null) {
+            val message = requireActivity().intent.getParcelableExtra<Message>(USER_DATA_LIST)
+            it.find { user ->
+                user.id == message!!.senderId
+            }.also {
+                findNavController()
+                    .navigate(R.id.action_userListFragment_to_chatFragment,
+                        Bundle().apply {
+                            putParcelable(USER_DATA, it)
+                        })
+                requireActivity().intent.removeExtra(USER_DATA_LIST)
+            }
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         LocalBroadcastManager.getInstance(requireContext())
             .unregisterReceiver(invitationBroadcastManager)
-    }
-
-    override fun onMultipleUserAction(isMultipleUserSelected: Boolean) {
-        if (isMultipleUserSelected) {
-            mBinding.sendGroup.visibility = View.VISIBLE
-            mBinding.sendGroup.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_userListFragment_to_outgoingInvitationFragment,
-                    Bundle().apply {
-                        putParcelable(USER_DATA, user)
-                        putString(TYPE_CALL, CALL_AUDIO)
-                    })
-            }
-
-        } else
-            mBinding.sendGroup.visibility = View.GONE
 
     }
+
+    override fun onDestroy() {
+        viewModel.updateUser(
+            mapOf("isOnline" to false), FirebaseAuth.getInstance().uid!!,
+            COLLECTION_USERS
+        ) {
+
+        }
+        super.onDestroy()
+    }
+
+
 }

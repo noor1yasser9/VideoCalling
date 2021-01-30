@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentCallIncomingBinding
-import com.nurbk.ps.projectm.model.CallingData
-import com.nurbk.ps.projectm.model.PushCalling
+import com.nurbk.ps.projectm.model.modelNetwork.CallingData
+import com.nurbk.ps.projectm.model.modelNetwork.PushCalling
 import com.nurbk.ps.projectm.network.ApiClient
 import com.nurbk.ps.projectm.others.*
-import com.nurbk.ps.projectm.ui.activity.MainActivity
 import okhttp3.ResponseBody
+import org.jitsi.meet.sdk.JitsiMeetActivity
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 //import org.jitsi.meet.sdk.JitsiMeetActivity
 //import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import retrofit2.Call
@@ -87,9 +87,23 @@ class IncomingCallFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             if (type == REMOTE_MSG_INVITATION_ACCEPTED) {
-                                val bundle = Bundle()
-                                bundle.putParcelable(DATA_CALLING, dataCalling)
-                                findNavController().navigate(R.id.action_to_call, bundle)
+                                if (dataCalling.meetingType == TYPE_SINGLE) {
+                                    val bundle = Bundle()
+                                    bundle.putParcelable(DATA_CALLING, dataCalling)
+                                    findNavController().navigate(R.id.action_to_call, bundle)
+                                } else {
+                                    val options = JitsiMeetConferenceOptions.Builder()
+                                        .setServerURL(URL("https://meet.jit.si"))
+                                        .setRoom(dataCalling.meetingRoom)
+                                        .setAudioMuted(false)
+                                        .setVideoMuted(false)
+                                        .setAudioOnly(false)
+                                        .setWelcomePageEnabled(false)
+                                        .build()
+                                    JitsiMeetActivity.launch(requireContext(), options)
+                                    findNavController().navigateUp()
+
+                                }
                             }
                         }
                     }
