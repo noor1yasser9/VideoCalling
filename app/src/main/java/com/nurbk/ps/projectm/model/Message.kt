@@ -14,6 +14,7 @@ data class Message(
     var receiverId: String = "",
     var isOwner: Boolean = false,
     var name: String = "",
+
     var photoUrl: String = "",
     var audioUrl: String = "",
     var audioFile: String = "",
