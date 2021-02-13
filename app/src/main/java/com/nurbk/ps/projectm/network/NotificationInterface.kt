@@ -16,6 +16,7 @@ interface NotificationInterface {
         "Content-Type:${VALUE_TYPE}"
     )
     @POST("send")
+
     fun sendRemoteMessage(
         @Body calling: PushCalling
     ): Call<ResponseBody>
