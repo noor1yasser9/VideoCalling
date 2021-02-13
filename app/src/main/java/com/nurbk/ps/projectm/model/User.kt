@@ -12,6 +12,7 @@ data class User(
     val password: String = "",
     val image: String = "",
     val token: String = "",
+
     var isOnline: Boolean = false,
     var typeUser: Int = USER_PROFILE,
     var usersGroup: ArrayList<User> = arrayListOf()
