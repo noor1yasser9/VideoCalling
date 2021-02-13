@@ -16,6 +16,7 @@ class ApiClient private constructor(context: Context) {
                 instance ?: createPreferences(context).also {
                     instance = it
                 }
+
             }
 
         private fun createPreferences(context: Context) =
