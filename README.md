@@ -8,7 +8,7 @@
 - Single activity
 - dataBinding 
 
-
+ 
 # Used libraries
 - ## Firebase Auth
   ### Before you begin
