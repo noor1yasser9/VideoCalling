@@ -49,9 +49,11 @@ class SignInRepository private constructor(context: Context) {
             }
 
     fun getProfileData(uid: String, onComplete: () -> Unit) =
+
         FirebaseFirestore.getInstance().collection(COLLECTION_USERS)
             .document(uid)
             .addSnapshotListener { querySnapshot, _ ->
+                sharedPreferences.getEditor()!!.putBoolean(IS_SIGN_IN, true).apply()
                 val userString = Gson().toJson(querySnapshot!!.toObject(User::class.java))
                 sharedPreferences.getEditor()!!.putString(USER_DATA_PROFILE, userString).apply()
                 onComplete()
