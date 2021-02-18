@@ -95,7 +95,12 @@ class ChatRepository private constructor(val context: Context) {
             .collection(COLLECTION_CHAT_CHANNEL)
             .document(idRes)
             .addSnapshotListener { querySnapshot, _ ->
-                _typing.postValue(querySnapshot!!.data!!["typing"] as Boolean)
+                try {
+
+                    _typing.postValue(querySnapshot!!.data!!["typing"] as Boolean)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
     }
 
@@ -203,7 +208,7 @@ class ChatRepository private constructor(val context: Context) {
 
 
     fun uploadVideo(
-        uri: Uri,type: String,
+        uri: Uri, type: String,
         onSuccess: (videoPath: String) -> Unit, onFailure: (expception: Exception) -> Unit
     ) {
 
