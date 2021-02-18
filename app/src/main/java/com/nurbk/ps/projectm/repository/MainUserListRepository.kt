@@ -14,6 +14,7 @@ import com.nurbk.ps.projectm.others.COLLECTION_GROUP_CHANNEL
 import com.nurbk.ps.projectm.others.COLLECTION_USERS
 import com.nurbk.ps.projectm.others.USER_DATA_PROFILE
 import com.nurbk.ps.projectm.utils.PreferencesManager
+import java.lang.Exception
 
 class MainUserListRepository private constructor(val context: Context) {
 
@@ -83,6 +84,7 @@ class MainUserListRepository private constructor(val context: Context) {
         val user =
             PreferencesManager(context).getUserProfile()
         updateData(mapOf("token" to " "), user.id) {
+            PreferencesManager(context).getEditor()!!.clear().clear().apply()
             FirebaseAuth.getInstance().signOut()
         }
     }
@@ -97,9 +99,14 @@ class MainUserListRepository private constructor(val context: Context) {
                 array.clear()
                 querySnapshot?.documents!!.forEach {
                     val item = it.toObject(User::class.java)
-                    item!!.isOnline = it["isOnline"] as Boolean
-                    if (item.id != FirebaseAuth.getInstance().currentUser!!.uid)
-                        array.add(item)
+                    try {
+                        item!!.isOnline = it["isOnline"] as Boolean
+                        if (item.id != FirebaseAuth.getInstance().currentUser!!.uid)
+                            array.add(item)
+                    }catch (e:Exception){
+                        e.printStackTrace()
+                    }
+
                 }
                 _getAllUserLiveData.postValue(array)
             }
