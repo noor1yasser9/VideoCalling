@@ -38,8 +38,6 @@ class SignUpRepository private constructor(context: Context) {
                     sendEmailVerification(user)
                 } else {
                     sigUpLiveData.postValue(false)
-                    Log.e("ttttttt", it.exception!!.message.toString())
-
                 }
             }
 
@@ -62,7 +60,7 @@ class SignUpRepository private constructor(context: Context) {
         }
     }
 
-    private fun insertUser(user: User) = FirebaseFirestore
+    public fun insertUser(user: User) = FirebaseFirestore
         .getInstance()
         .collection(COLLECTION_USERS)
         .document(user.id).set(user)
