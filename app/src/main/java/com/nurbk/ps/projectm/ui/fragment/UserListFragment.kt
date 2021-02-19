@@ -90,6 +90,9 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
         mBinding.btnLogOut.setOnClickListener {
             loadingDialog.show(requireActivity().supportFragmentManager, "")
+            requireActivity()
+                .getSharedPreferences(NAME_FILE_PREF, Context.MODE_PRIVATE)
+                .edit().putBoolean(IS_SIGN_IN, false).apply()
             viewModel.updateUser(
                 mapOf("isOnline" to false), FirebaseAuth.getInstance().uid!!,
                 COLLECTION_USERS
@@ -97,7 +100,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
             }
             viewModel.getLogOut().also {
-                PreferencesManager(requireContext()).getEditor()!!.clear().clear().apply()
+                PreferencesManager(requireContext()).getEditor()!!.clear().apply()
                 requireActivity().finish()
                 startActivity(Intent(requireContext(), MainActivity::class.java))
             }
@@ -247,7 +250,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
     override fun onDestroy() {
         viewModel.updateUser(
-            mapOf("isOnline" to false), FirebaseAuth.getInstance().uid!!,
+            mapOf("isOnline" to false), user.id,
             COLLECTION_USERS
         ) {
 
