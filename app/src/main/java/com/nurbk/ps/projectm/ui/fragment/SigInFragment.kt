@@ -2,7 +2,6 @@ package com.nurbk.ps.projectm.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
-import com.google.gson.Gson
+import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.nurbk.ps.projectm.R
 import com.nurbk.ps.projectm.databinding.FragmentSignInBinding
-import com.nurbk.ps.projectm.model.fb.FB
+import com.nurbk.ps.projectm.model.User
 import com.nurbk.ps.projectm.others.IS_SIGN_IN
 import com.nurbk.ps.projectm.ui.dialog.LoadingDialog
 import com.nurbk.ps.projectm.ui.viewmodel.SignInAuthViewModel
@@ -28,6 +27,7 @@ class SigInFragment : Fragment() {
 
     private lateinit var mBinding: FragmentSignInBinding
     private lateinit var loadingDialog: LoadingDialog
+
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -89,14 +89,15 @@ class SigInFragment : Fragment() {
                 loadingDialog.dismiss()
         }
 
-        if (PreferencesManager(requireContext()).getPreferences()!!.getBoolean(IS_SIGN_IN, false)) {
+        if (PreferencesManager(requireContext())
+                .getPreferences()
+            !!.getBoolean(IS_SIGN_IN, false) && FirebaseAuth.getInstance().currentUser != null
+        ) {
             findNavController().navigate(R.id.action_users_list_fragment)
         }
 
 
         callbackManager = CallbackManager.Factory.create();
-
-
         mBinding.loginButton.setOnClickListener {
             FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
             LoginManager.getInstance().logInWithReadPermissions(
@@ -111,15 +112,22 @@ class SigInFragment : Fragment() {
                             GraphRequest.newMeRequest(
                                 loginResult!!.accessToken
                             ) { jsonObject, response ->
-//                                val fb = Gson().fromJson(response.toString(), FB::class.java)
 
+                                handleFacebookAccessToken(loginResult.accessToken) {
+                                    viewModel.insertUsers(
+                                        User(
+                                            FirebaseAuth.getInstance().uid.toString(),
+                                            jsonObject.getString("name")
+                                        )
+                                    )
+                                    findNavController().navigate(R.id.action_users_list_fragment)
+                                }
                             },
                             GraphRequest.newMyFriendsRequest(
                                 loginResult.accessToken
-                            ) { jsonArray, response ->
-
-                            }
+                            ) { jsonArray, response -> }
                         )
+
                         batch.executeAsync()
                     }
 
@@ -127,6 +135,10 @@ class SigInFragment : Fragment() {
 
                     override fun onError(exception: FacebookException) = Unit
                 })
+        }
+
+        mBinding.googleSignIn.setOnClickListener {
+
         }
     }
 
@@ -136,5 +148,20 @@ class SigInFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager!!.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
+
+    }
+
+
+    private fun handleFacebookAccessToken(token: AccessToken, onComplete: () -> Unit) {
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onComplete()
+                } else {
+
+                }
+
+            }
     }
 }
