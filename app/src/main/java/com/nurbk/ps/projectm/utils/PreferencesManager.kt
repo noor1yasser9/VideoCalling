@@ -36,8 +36,8 @@ class PreferencesManager private constructor(context: Context) {
         editor = preferences!!.edit()
     }
 
-    fun getPreferences() = preferences
-    fun getEditor() = editor
+        fun getPreferences() = preferences
+        fun getEditor() = editor
 
     fun getUserProfile(): User =
         Gson().fromJson(preferences!!.getString(USER_DATA_PROFILE, ""), User::class.java)
