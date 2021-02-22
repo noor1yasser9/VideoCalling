@@ -7,7 +7,7 @@
 - MVVM architecture
 - Single activity
 - dataBinding 
-
+ 
  
 # Used libraries
 - ## Firebase Auth
